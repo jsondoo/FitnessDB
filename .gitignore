@@ -1,0 +1,7 @@
+node_modules/
+.idea/
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverridegit add
