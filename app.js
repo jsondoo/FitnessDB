@@ -13,13 +13,13 @@ const client = new pg.Client({
 client.connect();
 
 app.get('/', async function (req, res) {
-    let query = 'CREATE TABLE Branch(branch_id INTEGER, address CHAR(50),\n' +
+    let query = 'CREATE TABLE IF NOT EXISTS Branch(branch_id INTEGER, address CHAR(50),\n' +
         'phone_no CHAR(10), PRIMARY KEY(branch_id))';
-    client.query(query, (err, res) => {
+    client.query(query, (err, result) => {
         if (err) {
             console.log(err.stack)
         } else {
-            console.log(res.rows[0])
+            console.log(result.rows[0])
         }
     });
     res.sendFile(__dirname + '/public/index.html');
@@ -62,7 +62,7 @@ app.get('/populatebranch', (req, res) => {
     res.send('done');
 });
 
-app.get('/listbranches', async function (req, res) {
+app.get('/branches', async function (req, res) {
     let query = 'SELECT * FROM Branch';
     client.query(query, (err, result) => {
         if (err) {
