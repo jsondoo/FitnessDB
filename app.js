@@ -1,7 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
 const app = express();
-const portNo = '3000';
 
 // MySQL connection
 const db = mysql.createConnection({
@@ -115,6 +114,6 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-app.listen(portNo, () => {
-    console.log('Server started on port ' + portNo);
+app.listen(process.env.PORT || 5000, () => {
+    console.log('Server started');
 });
