@@ -144,6 +144,14 @@ app.get('/branches', async function (req, res) {
 
 
 app.get('/populateregmembership',(req, res) => {
+    let dropTable = 'DROP TABLE RegularMembership';
+    client.query(dropTable, (err, result) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
 
     let createRegMem = 'CREATE TABLE IF NOT EXISTS RegularMembership(membership_id INTEGER, start_date DATE, expiration_date DATE, \n' +
         'payment_method CHAR(25), PRIMARY KEY(membership_id))';
@@ -155,8 +163,8 @@ app.get('/populateregmembership',(req, res) => {
         }
     });
 
-    let insertRegMem = 'INSERT INTO regularMembership(membership_id, start_date, expiration_date, paymentmethod) VALUES (0 0 0)';
-    regularMembershipData.foreach((regularMembership) => {
+    let insertRegMem = 'INSERT INTO regularMembership(membership_id, start_date, expiration_date, payment_method) VALUES ($1, $2, $3, $4)';
+    regularMembershipData.forEach((regularMembership) => {
         let arr = [regularMembership.membership_id, regularMembership.start_date, regularMembership.expiration_date, regularMembership.payment_method];
         client.query(insertRegMem, arr, (err, result) => {
             if(err) {
@@ -166,7 +174,7 @@ app.get('/populateregmembership',(req, res) => {
             }
         });
     });
-    res.send('doneMemeber')
+    res.send('doneMember');
 });
 
 app.get('/regmembership', async function (req, res) {
