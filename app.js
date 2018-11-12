@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 let branchData = require("./data/branch_data");
+let customerData = require("./data/customer_data");
 
 const pg = require('pg');
 const client = new pg.Client({
@@ -25,6 +26,47 @@ app.get('/', async function (req, res) {
         }
     });
     res.sendFile(__dirname + '/public/index.html');
+});
+
+app.get('/populatecustomer', (req, res) => {
+    client.query('DROP TABLE Customer', (err,result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('Dropped customer table');
+        }
+    });
+    let queryA = 'CREATE TABLE IF NOT EXISTS Customer(email CHAR(40), name CHAR(20), date_of_birth DATE, address CHAR(50), phone_no CHAR(12), last_visit_date DATE, PRIMARY KEY (email))';
+    // Create Customer table
+    client.query(queryA, (err,result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('Created Customer table');
+        }
+    });
+    let insertCustomer = 'INSERT INTO Customer(email, name, date_of_birth, address, phone_no, last_visit_date) VALUES ($1, $2, $3, $4, $5, $6)';
+    customerData.forEach((c) => {
+        let arr = [c.email, c.name, c.date_of_birth, c.address, c.phone_no, c.last_visit_date];
+        client.query(insertCustomer, arr, (err, result) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(c.email + " succesfully added.");
+            }
+        });
+    });
+    res.send('done inserting customers rows');
+});
+
+app.get('/customers', (req, res) => {
+    client.query('SELECT * FROM Customer', (err,result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            res.send(JSON.stringify(result.rows));
+        }
+    });
 });
 
 app.get('/populatebranch', (req, res) => {
