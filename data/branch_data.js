@@ -1,4 +1,4 @@
-const branchData = [
+module.exports = [
  {
    "branch_id": 177,
    "address": "31221 Riverside Avenue",
@@ -500,5 +500,3 @@ const branchData = [
    "phone_no": "556-347-3764"
  }
 ];
-
-export { branchData };

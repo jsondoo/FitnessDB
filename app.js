@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-import {branchData} from "./data/branch_data";
+let branchData = require("./data/branch_data");
 
 const pg = require('pg');
 const client = new pg.Client({
