@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 let branchData = require("./data/branch_data");
+let regularMembershipData = require("./data/regularMembership_data");
 
 const pg = require('pg');
 const client = new pg.Client({
@@ -54,6 +55,50 @@ app.get('/branches', async function (req, res) {
         }
     });
 });
+
+
+
+app.get('/populateregmembership',(req, res) => {
+
+    let createRegMem = 'CREATE TABLE IF NOT EXISTS RegularMembership(membership_id INTEGER, start_date DATE, expiration_date DATE, \n' +
+        'payment_method CHAR(25), PRIMARY KEY(membership_id))';
+    client.query(createRegMem, (err, result) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
+
+    let insertRegMem = 'INSERT INTO regularMembership(membership_id, start_date, expiration_date, paymentmethod) VALUES (0 0 0)';
+    regularMembershipData.foreach((regularMembership) => {
+        let arr = [regularMembership.membership_id, regularMembership.start_date, regularMembership.expiration_date, regularMembership.payment_method];
+        client.query(insertRegMem, arr, (err, result) => {
+            if(err) {
+                console.log(err.message);
+            }else{
+                console.log(result.rows[0]);
+            }
+        });
+    });
+    res.send('doneMemeber')
+});
+
+app.get('/regmembership', async function (req, res) {
+    let query = 'SELECT * FROM regularMembership';
+    client.query(query, (err, result) => {
+        if (err) {
+            res.send(err.message);
+            return;
+        } else {
+            res.send(JSON.stringify(result.rows));
+            return;
+        }
+    });
+});
+
+
+
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server started succesfully.');
