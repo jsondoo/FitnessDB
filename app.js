@@ -19,15 +19,6 @@ client.connect();
 
 // CREATE TABLE FOR BRANCH
 app.get('/', async function (req, res) {
-    let query = 'CREATE TABLE IF NOT EXISTS Branch(branch_id INTEGER, address CHAR(50),\n' +
-       'phone_no CHAR(12), PRIMARY KEY(branch_id))';
-    client.query(query, (err, result) => {
-        if (err) {
-            console.log(err.stack)
-        } else {
-            console.log(result.rows[0])
-        }
-    });
     res.sendFile(__dirname + '/public/index.html');
 });
 
@@ -73,6 +64,24 @@ app.get('/customers', (req, res) => {
 });
 
 app.get('/populatebranch', (req, res) => {
+    client.query('DROP TABLE Branch', (err, result) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
+
+    let query = 'CREATE TABLE IF NOT EXISTS Branch(branch_id INTEGER, address CHAR(50),\n' +
+        'phone_no CHAR(12), PRIMARY KEY(branch_id))';
+    client.query(query, (err, result) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
+
     let insertBranch = 'INSERT INTO Branch(branch_id, address, phone_no) VALUES ($1, $2, $3)';
     branchData.forEach((branch) => {
         let arr = [branch.branch_id, branch.address, branch.phone_no];
