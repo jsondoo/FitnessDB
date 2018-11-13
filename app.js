@@ -8,6 +8,7 @@ let personalTrainerData = require("./data/branch_personalTrainer");
 let customerData = require("./data/customer_data");
 let regularMembershipData = require("./data/regularMembership_data");
 let instructorData = require("./data/instructor_data");
+let classData = require("./data/class_data");
 
 const pg = require('pg');
 const client = new pg.Client({
@@ -232,6 +233,54 @@ app.get('/Room', async function (req, res) {
             return;
         }
     });
+});
+
+app.get('/classes', async function (req, res) {
+    let query = 'SELECT * FROM Class';
+    client.query(query, (err, result) => {
+        if (err) {
+            res.send(err.message);
+            return;
+        } else {
+            res.send(JSON.stringify(result.rows));
+            return;
+        }
+    });
+});
+
+app.get('/populateclass',(req, res) => {
+    let dropClass = 'DROP TABLE Class';
+    client.query(dropClass, (err, result) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
+
+    let createClass = 'CREATE TABLE IF NOT EXISTS Class(time DATE, room_num INTEGER, sid INTEGER, \n' +
+        'class_type CHAR(20), PRIMARY KEY(time, room_num), FOREIGN KEY (sid) REFERENCES Instructor ON DELETE SET NULL \n' +
+        'ON UPDATE CASCADE)';
+    client.query(createClass, (err, result) => {
+        if (err) {
+            console.log(err.message)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
+
+    let insertClasses = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4)';
+    classData.forEach((singleClass) => {
+        let arr = [singleClass.time, singleClass.room_num, singleClass.sid, singleClass.course_type];
+        client.query(insertClasses, arr, (err, result) => {
+            if(err) {
+                console.log(err.message);
+            }else{
+                console.log(result.rows[0]);
+            }
+        });
+    });
+    res.send('doneMember');
 });
 
 app.get('/populateregmembership',(req, res) => {

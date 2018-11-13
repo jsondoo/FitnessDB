@@ -1,4 +1,4 @@
-module.exports = [{"time": "2018-10-11 20:37:33", "room_num": 108, "sid": 26899, "course_type": "yoga"},
+module.exports = [{"time": "2018-10-11 20:37:33", "room_num": 108, "sid": 19064, "course_type": "yoga"},
     {"time": "2018-10-03 02:54:13", "room_num": 109, "sid": 73018, "course_type": "cardio"},
     {"time": "2018-11-06 21:42:50", "room_num": 108, "sid": 70950, "course_type": "yoga"},
     {"time": "2018-10-31 22:51:51", "room_num": 100, "sid": 84838, "course_type": "cardio"},
@@ -17,4 +17,4 @@ module.exports = [{"time": "2018-10-11 20:37:33", "room_num": 108, "sid": 26899,
     {"time": "2018-11-08 18:53:42", "room_num": 101, "sid": 96293, "course_type": "strength"},
     {"time": "2018-11-01 06:38:48", "room_num": 103, "sid": 73690, "course_type": "yoga"},
     {"time": "2018-10-22 02:58:17", "room_num": 102, "sid": 37983, "course_type": "yoga"},
-    {"time": "2018-10-19 00:58:42", "room_num": 101, "sid": 31970, "course_type": "yoga"}]
+    {"time": "2018-10-19 00:58:42", "room_num": 101, "sid": 31970, "course_type": "yoga"}];
