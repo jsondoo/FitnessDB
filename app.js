@@ -11,6 +11,7 @@ let instructorData = require("./data/instructor_data");
 let premiumMemberData = require("./data/premiumMember_data");
 let memberData = require("./data/member_data");
 let classData = require("./data/class_data");
+let attendData = require("./data/attend_data");
 
 
 const pg = require('pg');
@@ -441,6 +442,46 @@ app.get('/PM', async function (req, res) {
 
 app.get('/Member', async function (req, res) {
     let query = 'SELECT * FROM Member';
+    client.query(query, (err, result) => {
+        if (err) {
+            res.send(err.message);
+            return;
+        } else {
+            res.send(JSON.stringify(result.rows));
+            return;
+        }
+    });
+});
+
+app.get('/populateAttend', async function (req, res) {
+
+    let createAttendTable = 'CREATE TABLE ATTEND(email CHAR(40), room_num INTEGER, time DATE,' +
+        'PRIMARY KEY(email, room_num, time),' +
+        'FOREIGN KEY(email) REFERENCES Customer ON DELETE CASCADE ON UPDATE CASCADE,' +
+        'FOREIGN KEY(time, room_num) REFERENCES Class ON DELETE SET NULL ON UPDATE CASCADE)';
+    client.query(createAttendTable,(err, result) => {
+            if (err) {
+                console.log(err.stack)
+            } else {
+                console.log(result.rows[0])
+            }
+        });
+
+    let insertAttend = 'INSERT INTO Attend(email, time, room_num) VALUES ($1, $2, $3)';
+    attendData.forEach((attend) => {
+        let arr = [attend.email, attend.time, attend.room_num];
+        client.query(insertAttend, arr, (err, result) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(result.rows[0]);
+            }
+        });
+    });
+});
+
+app.get('/Attend', async function (req, res) {
+    let query = 'SELECT * FROM Attend';
     client.query(query, (err, result) => {
         if (err) {
             res.send(err.message);

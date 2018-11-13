@@ -1,30 +1,30 @@
 module.exports = [
  {
-   "room_num": 196,
+   "room_num": 101,
    "capacity": 48
  },
  {
-   "room_num": 134,
+   "room_num": 102,
    "capacity": 75
  },
  {
-   "room_num": 153,
+   "room_num": 103,
    "capacity": 45
  },
  {
-   "room_num": 198,
+   "room_num": 104,
    "capacity": 54
  },
  {
-   "room_num": 177,
+   "room_num": 105,
    "capacity": 52
  },
  {
-   "room_num": 110,
+   "room_num": 106,
    "capacity": 43
  },
  {
-   "room_num": 132,
+   "room_num": 107,
    "capacity": 60
  },
  {
@@ -32,31 +32,15 @@ module.exports = [
    "capacity": 65
  },
  {
-   "room_num": 117,
+   "room_num": 109,
    "capacity": 36
  },
  {
-   "room_num": 145,
+   "room_num": 100,
    "capacity": 44
  },
- {
-   "room_num": 169,
-   "capacity": 51
- },
- {
-   "room_num": 187,
-   "capacity": 80
- },
- {
-   "room_num": 165,
-   "capacity": 80
- },
- {
-   "room_num": 118,
-   "capacity": 67
- },
- {
-   "room_num": 159,
-   "capacity": 39
- }
+    {
+        "room_num": 110,
+        "capacity": 44
+    }
 ]
