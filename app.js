@@ -328,7 +328,7 @@ app.get('/regmembership', async function (req, res) {
 });
 
 app.get('/populatemember', (req, res) => {
-    let createMemberQuery = 'CREATE TABLE Member (membership_id CHAR(30), email CHAR(30), member_points INTEGER)';
+    let createMemberQuery = 'CREATE TABLE Member (membership_id INTEGER, email CHAR(40), member_points INTEGER)';
     client.query(createMemberQuery, (err, result) => {
         if (err) {
             console.log(err.message);
@@ -337,7 +337,8 @@ app.get('/populatemember', (req, res) => {
 
     let insertMember = 'INSERT INTO Member(membership_id, email, member_points) VALUES ($1, $2, $3)';
     memberData.forEach((member) => {
-        client.query(insertMember, member, (err, result) => {
+        let arr = [member.membership_id, member.email, member.memberpoints];
+        client.query(insertMember, arr, (err, result) => {
             if (err) {
                 console.log(err.message);
             } else {
