@@ -8,6 +8,7 @@ let personalTrainerData = require("./data/branch_personalTrainer");
 let customerData = require("./data/customer_data");
 let regularMembershipData = require("./data/regularMembership_data");
 let instructorData = require("./data/instructor_data");
+let premiumMemberData = require("./data/premiumMember_data");
 
 const pg = require('pg');
 const client = new pg.Client({
@@ -270,6 +271,42 @@ app.get('/populateregmembership',(req, res) => {
 
 app.get('/regmembership', async function (req, res) {
     let query = 'SELECT * FROM regularMembership';
+    client.query(query, (err, result) => {
+        if (err) {
+            res.send(err.message);
+            return;
+        } else {
+            res.send(JSON.stringify(result.rows));
+            return;
+        }
+    });
+});
+
+app.get('/populatepremiummember', (req, res) => {
+	let createPremiumMemberQuery = 'CREATE TABLE PremiumMembership( membership_id INTEGER, sid INTEGER, PRIMARY KEY (membership_id), \n' +
+	'FOREIGN KEY (membership_id) REFERENCES regularMembership ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (sid) REFERENCES PersonalTrainer \n'+
+	'ON DELETE CASCADE ON UPDATE CASCADE)';
+	client.query(createPremiumMemberQuery, (err, result) => {
+		if (err) {
+			console.log(err.message);
+		}
+    });
+	
+    let insertPremiumMember = 'INSERT INTO PremiumMembership(sid, membership_id) VALUES ($1, $2)';
+    premiumMemberData.forEach((premiumMember) => {
+		client.query(insertPremiumMember, premiumMember, (err, result) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(result.rows[0]);
+            }
+        });
+    });
+    res.send('done');
+});
+
+app.get('/PM', async function (req, res) {
+    let query = 'SELECT * FROM PremiumMembership';
     client.query(query, (err, result) => {
         if (err) {
             res.send(err.message);
