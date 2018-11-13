@@ -137,6 +137,7 @@ app.get('/instructors', async function (req, res) {
         }
     });
 });
+
 app.get('/branches', async function (req, res) {
     let query = 'SELECT * FROM Branch';
     client.query(query, (err, result) => {
@@ -148,6 +149,50 @@ app.get('/branches', async function (req, res) {
             return;
         }
     });
+});
+
+app.get('/populategoesto', async function(req, res) {
+    let dropGoesTo = 'DROP TABLE GoesTo';
+    client.query(dropGoesTo, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('Dropped GoesTo Table');
+        }
+    });
+
+    let createGoesTo = 'CREATE TABLE GoesTo(\n' +
+        'branch_id INTEGER,\n' +
+        'email_address CHAR(40),\n' +
+        'PRIMARY KEY (branch_id, email_address),\n' +
+        'FOREIGN KEY (branch_id) REFERENCES Branch\n' +
+        'ON DELETE CASCADE\n' +
+        'ON UPDATE CASCADE,\n' +
+        'FOREIGN KEY (email_address) REFERENCES Customer\n' +
+        'ON DELETE CASCADE\n' +
+        'ON UPDATE CASCADE)\n';
+    client.query(createGoesTo, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('Created GoesTo Table');
+        }
+    });
+
+    let insertQuery = 'INSERT INTO GoesTo(branch_id, email_address) VALUES ($1, $2)';
+    let branchIDs = [177, 494, 904];
+    // Randomly generate branchID for a given customer for mock data
+    customerData.forEach((c, index) => {
+        let arr = [branchIDs[index % branchIDs.length], c.email];
+        client.query(insertQuery, arr, (err, result) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log('Added ' + JSON.stringify(arr));
+            }
+        });
+    });
+    res.send('done');
 });
 
 
