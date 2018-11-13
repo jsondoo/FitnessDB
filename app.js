@@ -8,6 +8,8 @@ let personalTrainerData = require("./data/branch_personalTrainer");
 let customerData = require("./data/customer_data");
 let regularMembershipData = require("./data/regularMembership_data");
 let instructorData = require("./data/instructor_data");
+let memberData = require("./data/member_data");
+
 
 const pg = require('pg');
 const client = new pg.Client({
@@ -280,6 +282,42 @@ app.get('/regmembership', async function (req, res) {
         }
     });
 });
+
+app.get('/populatemember', (req, res) => {
+    let createMemberQuery = 'CREATE TABLE Member (membership_id CHAR(30), email CHAR(30), member_points INTEGER);
+    client.query(createMemberQuery, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
+
+    let insertMember = 'INSERT INTO Member(membership_id, email, member_points) VALUES ($1, $2, $3)';
+    memberData.forEach((member) => {
+        client.query(insertMember, member, (err, result) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(result.rows[0]);
+            }
+        });
+    });
+    res.send('member done');
+});
+
+app.get('/Member', async function (req, res) {
+    let query = 'SELECT * FROM Member';
+    client.query(query, (err, result) => {
+        if (err) {
+            res.send(err.message);
+            return;
+        } else {
+            res.send(JSON.stringify(result.rows));
+            return;
+        }
+    });
+});
+
+
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server started succesfully.');

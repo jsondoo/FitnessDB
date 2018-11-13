@@ -72,39 +72,4 @@ module.exports = [{
         "start_date": "2018-06-14",
         "expiration_date": "2020-12-27",
         "payment_method": "americanexpress"
-    },
-    {
-        "membership_id": 58414,
-        "start_date": "2018-09-29",
-        "expiration_date": "2020-02-21",
-        "payment_method": "diners-club-carte-blanche"
-    },
-    {
-        "membership_id": 53047,
-        "start_date": "2018-06-04",
-        "expiration_date": "2020-12-01",
-        "payment_method": "bankcard"
-    },
-    {"membership_id": 26643, "start_date": "2018-06-07", "expiration_date": "2020-12-20", "payment_method": "jcb"},
-    {
-        "membership_id": 49398,
-        "start_date": "2018-08-23",
-        "expiration_date": "2020-11-06",
-        "payment_method": "mastercard"
-    },
-    {"membership_id": 10927, "start_date": "2018-06-26", "expiration_date": "2021-04-01", "payment_method": "jcb"},
-    {"membership_id": 26385, "start_date": "2018-10-12", "expiration_date": "2022-05-28", "payment_method": "jcb"},
-    {"membership_id": 83266, "start_date": "2018-10-14", "expiration_date": "2021-09-01", "payment_method": "jcb"},
-    {"membership_id": 97528, "start_date": "2018-08-25", "expiration_date": "2021-03-29", "payment_method": "jcb"},
-    {
-        "membership_id": 74285,
-        "start_date": "2018-10-23",
-        "expiration_date": "2022-03-12",
-        "payment_method": "mastercard"
-    },
-    {
-        "membership_id": 23701,
-        "start_date": "2018-06-30",
-        "expiration_date": "2021-04-16",
-        "payment_method": "bankcard"
     }];
