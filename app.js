@@ -8,6 +8,8 @@ let personalTrainerData = require("./data/branch_personalTrainer");
 let customerData = require("./data/customer_data");
 let regularMembershipData = require("./data/regularMembership_data");
 let instructorData = require("./data/instructor_data");
+let memberData = require("./data/member_data");
+
 let classData = require("./data/class_data");
 
 const pg = require('pg');
@@ -210,6 +212,50 @@ app.get('/branches', async function (req, res) {
     });
 });
 
+app.get('/populategoesto', async function(req, res) {
+    let dropGoesTo = 'DROP TABLE GoesTo';
+    client.query(dropGoesTo, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('Dropped GoesTo Table');
+        }
+    });
+
+    let createGoesTo = 'CREATE TABLE GoesTo(\n' +
+        'branch_id INTEGER,\n' +
+        'email_address CHAR(40),\n' +
+        'PRIMARY KEY (branch_id, email_address),\n' +
+        'FOREIGN KEY (branch_id) REFERENCES Branch\n' +
+        'ON DELETE CASCADE\n' +
+        'ON UPDATE CASCADE,\n' +
+        'FOREIGN KEY (email_address) REFERENCES Customer\n' +
+        'ON DELETE CASCADE\n' +
+        'ON UPDATE CASCADE)\n';
+    client.query(createGoesTo, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('Created GoesTo Table');
+        }
+    });
+
+    let insertQuery = 'INSERT INTO GoesTo(branch_id, email_address) VALUES ($1, $2)';
+    let branchIDs = [177, 494, 904];
+    // Randomly generate branchID for a given customer for mock data
+    customerData.forEach((c, index) => {
+        let arr = [branchIDs[index % branchIDs.length], c.email];
+        client.query(insertQuery, arr, (err, result) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log('Added ' + JSON.stringify(arr));
+            }
+        });
+    });
+    res.send('done');
+});
+
 app.get('/Machine', async function (req, res) {
     let query = 'SELECT * FROM Machine';
     client.query(query, (err, result) => {
@@ -329,6 +375,46 @@ app.get('/regmembership', async function (req, res) {
         }
     });
 });
+
+app.get('/populatemember', (req, res) => {
+    let createMemberQuery = 'CREATE TABLE Member (membership_id INTEGER, email CHAR(40), member_points INTEGER),' +
+        'PRIMARY KEY(email),' +
+        'FOREIGN KEY(email) REFERENCES Customer ON UPDATE CASCADE,' +
+        'FOREIGN KEY(membership_id) REFERENCES RegularMembership ON DELETE CASCADE ON UPDATE CASCADE)';
+    client.query(createMemberQuery, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
+
+    let insertMember = 'INSERT INTO Member(membership_id, email, member_points) VALUES ($1, $2, $3)';
+    memberData.forEach((member) => {
+        let arr = [member.membership_id, member.email, member.memberpoints];
+        client.query(insertMember, arr, (err, result) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(result.rows[0]);
+            }
+        });
+    });
+    res.send('member done');
+});
+
+app.get('/Member', async function (req, res) {
+    let query = 'SELECT * FROM Member';
+    client.query(query, (err, result) => {
+        if (err) {
+            res.send(err.message);
+            return;
+        } else {
+            res.send(JSON.stringify(result.rows));
+            return;
+        }
+    });
+});
+
+
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server started succesfully.');
