@@ -328,7 +328,10 @@ app.get('/regmembership', async function (req, res) {
 });
 
 app.get('/populatemember', (req, res) => {
-    let createMemberQuery = 'CREATE TABLE Member (membership_id INTEGER, email CHAR(40), member_points INTEGER)';
+    let createMemberQuery = 'CREATE TABLE Member (membership_id INTEGER, email CHAR(40), member_points INTEGER),' +
+        'PRIMARY KEY(email),' +
+        'FOREIGN KEY(email) REFERENCES Customer ON UPDATE CASCADE,' +
+        'FOREIGN KEY(membership_id) REFERENCES RegularMembership ON DELETE CASCADE ON UPDATE CASCADE)';
     client.query(createMemberQuery, (err, result) => {
         if (err) {
             console.log(err.message);
