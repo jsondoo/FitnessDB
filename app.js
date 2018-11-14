@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded());
 
 let branchData = require("./data/branch_data");
 let machineData = require("./data/branch_machines");
@@ -25,9 +27,12 @@ const client = new pg.Client({
 });
 client.connect();
 
-// CREATE TABLE FOR BRANCH
 app.get('/', async function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
+});
+
+app.get('/test', function(req, res) {
+    res.sendFile(__dirname + '/public/test.html');
 });
 
 app.get('/populatecustomer', (req, res) => {
@@ -65,8 +70,9 @@ app.get('/customers', (req, res) => {
     client.query('SELECT * FROM Customer', (err,result) => {
         if (err) {
             console.log(err.message);
+            res.status(400);
         } else {
-            res.send(JSON.stringify(result.rows));
+            res.status(200).send(result.rows);
         }
     });
 });
@@ -488,6 +494,31 @@ app.get('/Attend', async function (req, res) {
             return;
         } else {
             res.send(JSON.stringify(result.rows));
+            return;
+        }
+    });
+});
+
+app.post('/updatecustomer', async function(req, res) {
+    // data from the form
+    let email = req.body.email;
+    let name = req.body.name;
+    let date_of_birth = req.body.dob;
+    let address = req.body.address;
+    let phone_no = req.body.phoneno;
+    let last_visit_date = req.body.lvd;
+
+    // use the data to perform a query
+    let updateCustomer = "UPDATE Customer SET name=($2), date_of_birth=($3), address=($4), phone_no=($5), last_visit_date=($6) WHERE email=($1);"
+    let arr = [email, name, date_of_birth, address, phone_no, last_visit_date];
+    client.query(updateCustomer, arr, (err, result) => {
+        if (err) {
+            console.log('Something went wrong...');
+            res.sendStatus(400);
+            return;
+        } else {
+            console.log('Updated customer!');
+            res.sendStatus(200);
             return;
         }
     });
