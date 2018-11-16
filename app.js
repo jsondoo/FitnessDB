@@ -337,7 +337,7 @@ app.get('/populateAttend', async function (req, res) {
     let createAttendTable = 'CREATE TABLE ATTEND(email CHAR(40), room_num INTEGER, time DATE,' +
         'PRIMARY KEY(email, room_num, time),' +
         'FOREIGN KEY(email) REFERENCES Customer ON DELETE CASCADE ON UPDATE CASCADE,' +
-        'FOREIGN KEY(time, room_num) REFERENCES Class ON DELETE SET NULL ON UPDATE CASCADE)';
+        'FOREIGN KEY(time, room_num) REFERENCES Class ON DELETE CASCADE ON UPDATE CASCADE)';
     client.query(createAttendTable, (err, result) => {
         if (err) {
             console.log(err.stack)
@@ -597,6 +597,96 @@ app.post('/updatecustomer', async function(req, res) {
         }
     });
 });
+
+app.post('/class', async function(req, res) {
+    // data from the form
+    let classTime= req.body.classTime;
+    let room = req.body.classRoom;
+    let sid = req.body.sid;
+    let type = req.body.classType;
+	let action = req.body.action;
+	let arr = [classTime, room, sid, type];
+	let arr2 = [classTime, room];
+
+
+	if (action == 'Update') {
+        let updateClass = 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2);'	
+		client.query(updateClass, arr, (err, result) => {
+			if (err) {
+				console.log('Something went wrong... in updating class');
+				res.sendStatus(400);
+				return;
+			} else {
+				console.log('Updated class!');
+				res.sendStatus(200);
+				return;
+			}
+		});
+	} else if (action== 'Insert') {
+		let insertClass = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4);'	
+		client.query(insertClass, arr, (err, result) => {
+			if (err) {
+				console.log('Something went wrong... in inserting');
+				res.sendStatus(400);
+				return;
+			} else {
+				console.log('Inserted class!');
+				res.sendStatus(200);
+				return;
+			}
+		});
+				
+	} else if (action == 'Delete'){
+		let deleteClass = 'DELETE FROM Class WHERE room_num=($2) AND time=($1);'	
+		client.query(deleteClass, arr2, (err, result) => {
+			if (err) {
+				console.log('Something went wrong...in delete');
+				console.log(err);
+				res.sendStatus(400);
+				return;
+			} else {
+				console.log('Deleted class!');
+				res.sendStatus(200);
+				return;
+			}
+		});
+		
+    
+	}else {
+				console.log('Something went wrong...');
+				res.sendStatus(400);
+	}
+
+})
+
+
+app.get('/dropAttend', (req, res) => {
+    let dropAttend = 'DROP TABLE Attend';
+    client.query(dropAttend, (err, result) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
+});
+
+app.post('/studentsInClass', (req, res) => {
+	let type = req.body.studentType;
+	let arr2 = [type];
+	let studentClass = 'SELECT name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))';	
+	client.query(studentClass, arr2, (err, result) => {
+        if (err) {
+            console.log(err.message);
+			console.log('in here');
+            res.status(400);
+        } else {
+			console.log('sending');
+            res.status(200).send(result.rows);
+        }
+    });
+});
+
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server started succesfully.');
