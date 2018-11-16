@@ -28,11 +28,21 @@
     <br>
     <table id="classData" border="1">
     </table>
+    <br><br>
+
+    <p>Get students by class type</p>
+    <input id="student_type" type="text" name="studentType" value=""><br>
+    <button onclick="buildHtmlTable2()">Get Data</button>
+
+    <br>
+    <table id="studentsInClass" border="1">
+    </table>
+
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
         // CHANGE THESE TWO VARIABLES
-        let tableID = "#classData";    // id of table
+        let tableID = "#classData";    // id    of table
         let dataEndpoint = "/getclasses";  // GET endpoint for the data
 
         // figure out if we are on localhost or heroku
@@ -100,48 +110,21 @@
                 });
             });
         }
-    </script>
-	
-	
-	 <form id="studentClass" action="/studentsInClass" method="post">
-        <fieldset>
-            <legend>Get Students In Class</legend>
-            Class Type:<br>
-            <input type="text" name="studentType" value=""><br>
-            <br>
 
-        </fieldset>
-    </form>
-			<button type="submit" form="studentClass" onclick="buildHtmlTable()" value="studentClass">Get Data</button>
-
-    <br>
-    <table id="studentsInClass" border="1">
-    </table>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
         // CHANGE THESE TWO VARIABLES
-        let tableID = "#studentsInClass";    // id of table
-        let dataEndpoint = "/studentsInClass";  // GET endpoint for the data
+        let tableID2 = "#studentsInClass";    // id of table
+        let dataEndpoint2 = "/studentsInClass";  // GET endpoint for the data
 
-        // figure out if we are on localhost or heroku
-        let baseURL;
-        let dataType = "json"; // use "jsonp" for cross origin requests
-        if (location.hostname === "localhost") {
-            baseURL = "http://localhost:5000";
-        } else {
-            baseURL = "https://fitnessdb.herokuapp.com";
-        }
-
-        async function buildHtmlTable() {
+        async function buildHtmlTable2() {
             // first clear the table
-            $(tableID).children().remove();
+            $(tableID2).children().remove();
+            console.log('hello t');
 
             // get data for the table
-            let data = await getData();
+            let data = await getData2();
 
             // populate table
-            let columns = addAllColumnHeaders(data);
+            let columns = addAllColumnHeaders2(data);
             for (let i = 0; i < data.length; i++) {
                 let row$ = $('<tr/>');
                 for (let colIndex = 0; colIndex < columns.length; colIndex++) {
@@ -149,12 +132,11 @@
                     if (cellValue == null) cellValue = "";
                     row$.append($('<td/>').html(cellValue));
                 }
-                $(tableID).append(row$)
+                $(tableID2).append(row$)
             }
         }
 
-        // adds a header row to the table and returns the column headers
-        function addAllColumnHeaders(data) {
+        function addAllColumnHeaders2(data) {
             let columnSet = [];
             let headerTr$ = $('<tr/>');
 
@@ -167,23 +149,24 @@
                     }
                 }
             }
-            $(tableID).append(headerTr$);
+            $(tableID2).append(headerTr$);
             return columnSet;
         }
 
         // send a GET request to get all customer data
-        async function getData() {
+        async function getData2() {
             return new Promise(function(fulfill, reject) {
+                let student_type = document.getElementById("student_type").value;
+                console.log(student_type);
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     dataType: dataType,
-                    url: baseURL + dataEndpoint,
+                    url: baseURL + dataEndpoint2 + "/" + student_type,
                     success: function(data) {
-                        console.log(data);
                         fulfill(data);
                     },
                     error: function () {
-                        alert('error getting data');
+                        alert('Please enter a valid type');
                         reject();
                     },
                 });

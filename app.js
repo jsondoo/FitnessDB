@@ -671,19 +671,14 @@ app.get('/dropAttend', (req, res) => {
     });
 });
 
-app.post('/studentsInClass', (req, res) => {
-	let type = req.body.studentType;
+app.get('/studentsInClass/:type', (req, res) => {
+	let type = req.params.type;
 	let arr2 = [type];
-	let studentClass = 'SELECT name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))';	
+	let studentClass = 'SELECT customer.name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))';
 	client.query(studentClass, arr2, (err, result) => {
-        if (err) {
-            console.log(err.message);
-			console.log('in here');
-            res.status(400);
-        } else {
-			console.log('sending');
-            res.status(200).send(result.rows);
-        }
+        console.log('succeeed');
+        console.log(result.rows);
+        res.status(200).send(result.rows);
     });
 });
 
