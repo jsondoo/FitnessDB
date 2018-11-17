@@ -404,9 +404,7 @@ app.get('/populategoesto', async function (req, res) {
     res.send('done');
 });
 
-
-
-app.get('/populatebodyprofile', (req, res) => {
+app.get("/dropbodyprofile", (req, res) => {
     let dropClass = 'DROP TABLE BodyProfile';
     client.query(dropClass, (err, result) => {
         if (err) {
@@ -415,9 +413,11 @@ app.get('/populatebodyprofile', (req, res) => {
             console.log(result.rows[0])
         }
     });
+});
 
-    let createClass = 'CREATE TABLE IF NOT EXISTS BodyProfile(membership_id INTEGER NOT NULL, pname CHAR(15), BMI INTEGER, weight INTEGER, \n' +
-        'age INTEGER, height INTEGER, date DATE, PRIMARY KEY(membership_id, pname), FOREIGN KEY (membership_id) REFERENCES RegularMembership ON DELETE CASCADE \n' +
+app.get('/populatebodyprofile', (req, res) => {
+    let createClass = 'CREATE TABLE IF NOT EXISTS BodyProfile(membership_id INTEGER NOT NULL, pid INTEGER NOT NULL, BMI INTEGER, weight INTEGER, \n' +
+        'age INTEGER, height INTEGER, date DATE, PRIMARY KEY(membership_id, pid), FOREIGN KEY (membership_id) REFERENCES RegularMembership ON DELETE CASCADE \n' +
         'ON UPDATE CASCADE)';
     client.query(createClass, (err, result) => {
         if (err) {
@@ -427,10 +427,10 @@ app.get('/populatebodyprofile', (req, res) => {
         }
     });
 
-    let insertBodyProfiles = 'INSERT INTO BodyProfile(membership_id, pname, BMI, weight, age, height, date) ' +
+    let insertBodyProfiles = 'INSERT INTO BodyProfile(membership_id, pid, BMI, weight, age, height, date) ' +
         'VALUES ($1, $2, $3, $4, $5, $6, $7)';
     bodyProfileData.forEach((bodyProfile) => {
-        let arr = [bodyProfile.membership_id, bodyProfile.pname, bodyProfile.BMI, bodyProfile.weight, bodyProfile.age, bodyProfile.height, bodyProfile.date];
+        let arr = [bodyProfile.membership_id, bodyProfile.pid, bodyProfile.BMI, bodyProfile.weight, bodyProfile.age, bodyProfile.height, bodyProfile.date];
         client.query(insertBodyProfiles, arr, (err, result) => {
             if (err) {
                 console.log(err.message);
@@ -594,6 +594,72 @@ app.post('/updatecustomer', async function(req, res) {
             console.log('Updated customer!');
             res.sendStatus(200);
             return;
+        }
+    });
+});
+
+app.post('/updatebodyprofile', async function(req, res) {
+    // data from the form
+    let membership_id = req.body.membership_id;
+    let pid = req.body.pid;
+    let bmi = req.body.bmi;
+    let weight = req.body.weight;
+    let age = req.body.age;
+    let height = req.body.height;
+    let date = req.body.date;
+
+    // use the data to perform a query
+    let updateBodyProfile = "UPDATE BodyProfile SET BMI=($3), weight=($4), age=($5), height=($6), date=($7) WHERE membership_id=($1) AND pid=($2);";
+    let arr = [membership_id, pid, bmi, weight, age, height, date];
+    client.query(updateBodyProfile, arr, (err, result) => {
+        if (err) {
+            console.log('Something went wrong...');
+            res.sendStatus(400);
+        } else {
+            console.log('Updated body profile!');
+            res.redirect("/bodyprofile");
+        }
+    });
+});
+
+app.post('/insertbodyprofile', async function(req, res) {
+    // data from the form
+    let membership_id = req.body.membership_id;
+    let pid = req.body.pid;
+    let bmi = req.body.bmi;
+    let weight = req.body.weight;
+    let age = req.body.age;
+    let height = req.body.height;
+    let date = req.body.date;
+
+    let insertBodyProfiles = 'INSERT INTO BodyProfile(membership_id, pid, BMI, weight, age, height, date) ' +
+        'VALUES ($1, $2, $3, $4, $5, $6, $7)';
+    let bodyProfile = [membership_id, pid, bmi, weight, age, height, date];
+    client.query(insertBodyProfiles, bodyProfile, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.sendStatus(400);
+        } else {
+            console.log('Added a new body profile!');
+            res.redirect("/bodyprofile");
+        }
+    });
+});
+
+app.post('/deletebodyprofile', async function(req, res) {
+    // data from the form
+    let membership_id = req.body.membership_id;
+    let pid = req.body.pid;
+
+    let insertBodyProfiles = 'DELETE FROM BodyProfile WHERE membership_id=($1) AND pid=($2)';
+    let bodyProfile = [membership_id, pid];
+    client.query(insertBodyProfiles, bodyProfile, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.sendStatus(400);
+        } else {
+            console.log(`Deleted body profile with membership id: ${membership_id} and pid: ${pid}`);
+            res.redirect("/bodyprofile");
         }
     });
 });
