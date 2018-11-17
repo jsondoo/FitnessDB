@@ -39,6 +39,15 @@
     <table id="bodyprofileTable" border="1">
     </table>
 
+    <br>
+    <ul>
+        <li>View branches: 'SELECT * FROM Branch'</li>
+        <li>View classes: 'SELECT * FROM Class'</li>
+        <li>View personal information: 'SELECT name, date_of_birth, address, phone_no, last_visit_date from Customer where email=($1)'</li>
+        <li>View member information: 'SELECT membership_id, member_points from Member where email=($1)'</li>
+        <li>View body profiles:'SELECT DISTINCT b.pid, b.BMI, b.weight, b.age, b.height, b.date from BodyProfile b, Member m WHERE m.email = ($1) and m.membership_id = b.membership_id'</li>
+    </ul>
+
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
         let tableID = "";    // id of table
