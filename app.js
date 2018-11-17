@@ -755,8 +755,73 @@ app.post('/updatemembership', async function (req, res) {
     }
 });
 
+app.post('/updatemachines', async function(req,res){
+    let mid = req.body.mid;
+    let date_bought = req.body.date_bought;
+    let condition = req.body.condition;
+    let last_maintenance = req.body.last_maintenance;
+    let cost = req.body.cost;
+    let type = req.body.type;
+    let branch_id = req.body.branch_id;
 
-app.post('/class', async function (req, res) {
+    let updateMachines = "UPDATE Machine SET date_bought=($2), condition=($3), last_maintenance=($4), cost=($5), type=($6), branch_id=($7) WHERE mid=($1);";
+    let arr = [mid, date_bought, condition, last_maintenance, cost, type, branch_id];
+    client.query(updateMachines, arr, (err, result) => {
+        if (err){
+            console.log(err);
+            console.log('Ooooops...');
+            res.sendStatus(400);
+        }else{
+            console.log('Update Machine Information!!!');
+            res.redirect("/machine");
+        }
+    });
+});
+
+app.post('/insertMachine', async function(req, res) {
+    // data from the form
+    let mid = req.body.mid;
+    let date_bought =  req.body.date_bought;
+    let condition = req.body.condition;
+    let last_maintenance = req.body.last_maintenance;
+    let cost = req.body.cost;
+    let type = req.body.type;
+    let branch_id = req.body.branch_id;
+
+    let insertMachine = 'INSERT INTO Machine(mid, date_bought, condition, last_maintenance, cost, type, branch_id)'+
+        'VALUES ($1, $2, $3, $4, $5, $6, $7)';
+    let arr = [mid, date_bought, condition, last_maintenance, cost, type, branch_id];
+    client.query(insertMachine, arr, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.sendStatus(400);
+        } else {
+            console.log('Added a new machine!!!');
+            res.redirect("/machine");
+        }
+    });
+});
+
+
+app.post('/deletemachine', async function(req,res){
+    let mid = req.body.mid;
+
+    let insertmachine = 'DELETE FROM machine WHERE mid=($1)';
+    let machine = [mid];
+    client.query(insertmachine, machine,(err,result) => {
+        if(err){
+            console.log(err.message);
+            res.sendStatus(400);
+        }else{
+            console.log('Deleted machine with machine id: ${mid}');
+            res.redirect("/machine");
+        }
+    });
+});
+
+
+
+app.post('/class', async function(req, res) {
     // data from the form
     let classTime = req.body.classTime;
     let room = req.body.classRoom;
