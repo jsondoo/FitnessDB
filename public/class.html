@@ -37,7 +37,14 @@
     <br>
     <table id="studentsInClass" border="1">
     </table>
-
+	<br>
+<ul>
+  <li>Insert: 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4)'</li>
+  <li>Update: 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2)'</li>
+  <li>Delete: 'DELETE FROM Class WHERE room_num=($2) AND time=($1)'</li>
+  <li>Class Data: 'SELECT * FROM Class'</li>
+  <li>Students in Type Of Class: 'SELECT customer.name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))'</li>
+</ul>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>

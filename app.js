@@ -618,7 +618,7 @@ app.post('/class', async function(req, res) {
 				return;
 			} else {
 				console.log('Updated class!');
-				res.sendStatus(200);
+				res.redirect("/class");
 				return;
 			}
 		});
@@ -631,7 +631,7 @@ app.post('/class', async function(req, res) {
 				return;
 			} else {
 				console.log('Inserted class!');
-				res.sendStatus(200);
+				res.redirect("/class");
 				return;
 			}
 		});
@@ -646,7 +646,7 @@ app.post('/class', async function(req, res) {
 				return;
 			} else {
 				console.log('Deleted class!');
-				res.sendStatus(200);
+				res.redirect("/class");
 				return;
 			}
 		});
@@ -679,6 +679,61 @@ app.get('/studentsInClass/:type', (req, res) => {
         console.log('succeeed');
         console.log(result.rows);
         res.status(200).send(result.rows);
+    });
+});
+
+
+
+app.get('/getAddressMachine/:month', async function (req, res) {
+	let month = req.params.month;
+    let query = "SELECT b.address FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)";
+    client.query(query, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(400);
+        } else {
+            res.status(200).send(result.rows);
+        }
+    });
+});
+
+app.get('/getCostMachine', async function (req, res) {
+    let query = 'Select sum(cost) as Total_Cost , branch_id from Machine group by branch_id';
+    client.query(query, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(400);
+        } else {
+            res.status(200).send(result.rows);
+        }
+    });
+});
+
+
+app.get('/getCustBranch', async function (req, res) {
+	//let query = ' drop view custBranch';
+    //let query = 'create or replace view custBranch as Select count(email_address) as CustomersInBranch, branch_id From GoesTo group by branch_id';
+	let query = 'SELECT * FROM custBranch';
+    client.query(query, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(400);
+        } else {
+            res.status(200).send(result.rows);
+        }
+    });
+});
+
+
+app.get('/getmembers', async function (req, res) {
+    let query = 'SELECT * FROM Member';
+    client.query(query, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(400);
+        } else {
+            res.status(200).send(result.rows);
+        }
     });
 });
 
