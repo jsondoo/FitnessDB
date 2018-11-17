@@ -33,35 +33,35 @@ app.get('/', async function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/employee', function(req, res) {
+app.get('/employee', function (req, res) {
     res.sendFile(__dirname + '/public/employee.html');
 });
 
-app.get('/customerhub', function(req, res) {
+app.get('/customerhub', function (req, res) {
     res.sendFile(__dirname + '/public/customerhub.html');
 });
 
-app.get('/machine', function(req, res) {
+app.get('/machine', function (req, res) {
     res.sendFile(__dirname + '/public/machine.html');
 });
 
-app.get('/class', function(req, res) {
+app.get('/class', function (req, res) {
     res.sendFile(__dirname + '/public/class.html');
 });
 
-app.get('/bodyprofile', function(req, res) {
+app.get('/bodyprofile', function (req, res) {
     res.sendFile(__dirname + '/public/bodyprofile.html');
 });
 
-app.get('/membership', function(req, res) {
+app.get('/membership', function (req, res) {
     res.sendFile(__dirname + '/public/membership.html');
 });
 
-app.get('/branch', function(req, res) {
+app.get('/branch', function (req, res) {
     res.sendFile(__dirname + '/public/branch.html');
 });
 
-app.get('/customer', function(req, res) {
+app.get('/customer', function (req, res) {
     res.sendFile(__dirname + '/public/customer.html');
 });
 
@@ -537,6 +537,20 @@ app.get('/getregmemberships', async function (req, res) {
     });
 });
 
+app.get('/getmembershipswithpoints', async function (req, res) {
+    let query = 'SELECT DISTINCT reg.membership_id AS MembershipId, reg.start_date AS StartDate, reg.expiration_date AS ExpirationDate,' +
+        'reg.payment_method AS paymentMethod, mem.email AS Email, mem.member_points AS points FROM RegularMembership reg, Member mem WHERE reg.membership_id = mem.membership_id';
+    client.query(query, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(400);
+        } else {
+            res.status(200).send(result.rows);
+        }
+    });
+});
+
+
 app.get('/getPMs', async function (req, res) {
     let query = 'SELECT * FROM PremiumMembership';
     client.query(query, (err, result) => {
@@ -573,7 +587,7 @@ app.get('/getattend', async function (req, res) {
     });
 });
 
-app.post('/updatecustomer', async function(req, res) {
+app.post('/updatecustomer', async function (req, res) {
     // data from the form
     let email = req.body.email;
     let name = req.body.name;
@@ -598,7 +612,7 @@ app.post('/updatecustomer', async function(req, res) {
     });
 });
 
-app.post('/updatebodyprofile', async function(req, res) {
+app.post('/updatebodyprofile', async function (req, res) {
     // data from the form
     let membership_id = req.body.membership_id;
     let pid = req.body.pid;
@@ -622,7 +636,7 @@ app.post('/updatebodyprofile', async function(req, res) {
     });
 });
 
-app.post('/insertbodyprofile', async function(req, res) {
+app.post('/insertbodyprofile', async function (req, res) {
     // data from the form
     let membership_id = req.body.membership_id;
     let pid = req.body.pid;
@@ -646,7 +660,7 @@ app.post('/insertbodyprofile', async function(req, res) {
     });
 });
 
-app.post('/deletebodyprofile', async function(req, res) {
+app.post('/deletebodyprofile', async function (req, res) {
     // data from the form
     let membership_id = req.body.membership_id;
     let pid = req.body.pid;
@@ -664,19 +678,144 @@ app.post('/deletebodyprofile', async function(req, res) {
     });
 });
 
-app.post('/class', async function(req, res) {
+app.post('/updatemembership', async function (req, res) {
     // data from the form
-    let classTime= req.body.classTime;
+    let membership_id = req.body.membership_id;
+    let startDate = req.body.start_date;
+    let expirationDate = req.body.expiration_date;
+    let paymentMethod = req.body.payment_method;
+    let email = req.body.email;
+    let points = req.body.points;
+    let action = req.body.action;
+
+    switch (action) {
+        case "Insert":
+            let insertMembership = "INSERT INTO RegularMembership(membership_id, start_date, expiration_date, payment_method)" +
+                "VALUES ($1, $2, $3, $4);";
+            let insertMembershipArr = [membership_id, startDate, expirationDate, paymentMethod];
+            client.query(insertMembership, insertMembershipArr, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    console.log('Something went wrong...');
+                    res.sendStatus(400);
+                }
+            });
+
+            let insertMember = "INSERT INTO Member VALUES ($1, $2, $3);";
+            let insertMemberArr = [membership_id, email, points];
+            client.query(insertMember, insertMemberArr, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    console.log('Something went wrong...');
+                    res.sendStatus(400);
+                } else {
+                    console.log('Added a new membership!');
+                    res.redirect("/membership");
+                }
+            });
+            break;
+        case "Delete":
+            let deleteMembership = "DELETE FROM RegularMembership WHERE membership_id = ($1);";
+            let deleteMembershipArr = [membership_id];
+            client.query(deleteMembership, deleteMembershipArr, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    console.log('Something went wrong...');
+                    res.sendStatus(400);
+                } else {
+                    console.log(`Deleted a membership with the id: ${membership_id}`);
+                    res.redirect("/membership");
+                }
+            });
+            break;
+        case "Update":
+            let updateMembership = "UPDATE RegularMembership SET start_date=($2), expiration_date=($3), payment_method=($4)" +
+                "WHERE membership_id=($1);";
+            let membershipArr = [membership_id, startDate, expirationDate, paymentMethod];
+            client.query(updateMembership, membershipArr, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    console.log('Something went wrong...');
+                    res.sendStatus(400);
+                }
+            });
+
+            let updateMember = "UPDATE Member SET email=($2), member_points=($3) WHERE membership_id=($1);";
+            let memberArr = [membership_id, email, points];
+            client.query(updateMember, memberArr, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    console.log('Something went wrong...');
+                    res.sendStatus(400);
+                } else {
+                    console.log('Updated membership information!');
+                    res.redirect("/membership");
+                }
+            });
+    }
+});
+
+
+app.post('/class', async function (req, res) {
+    // data from the form
+    let classTime = req.body.classTime;
     let room = req.body.classRoom;
     let sid = req.body.sid;
     let type = req.body.classType;
-	let action = req.body.action;
-	let arr = [classTime, room, sid, type];
-	let arr2 = [classTime, room];
+    let action = req.body.action;
+    let arr = [classTime, room, sid, type];
+    let arr2 = [classTime, room];
 
 
+    if (action == 'Update') {
+        let updateClass = 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2);'
+        client.query(updateClass, arr, (err, result) => {
+            if (err) {
+                console.log('Something went wrong... in updating class');
+                res.sendStatus(400);
+                return;
+            } else {
+                console.log('Updated class!');
+                res.sendStatus(200);
+                return;
+            }
+        });
+    } else if (action == 'Insert') {
+        let insertClass = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4);'
+        client.query(insertClass, arr, (err, result) => {
+            if (err) {
+                console.log('Something went wrong... in inserting');
+                res.sendStatus(400);
+                return;
+            } else {
+                console.log('Inserted class!');
+                res.sendStatus(200);
+                return;
+            }
+        });
+
+    } else if (action == 'Delete') {
+        let deleteClass = 'DELETE FROM Class WHERE room_num=($2) AND time=($1);'
+        client.query(deleteClass, arr2, (err, result) => {
+            if (err) {
+                console.log('Something went wrong...in delete');
+                console.log(err);
+                res.sendStatus(400);
+                return;
+            } else {
+                console.log('Deleted class!');
+                res.sendStatus(200);
+                return;
+            }
+        });
+
+
+    } else {
+        console.log('Something went wrong...');
+        res.sendStatus(400);
+    }
 	if (action == 'Update') {
-        let updateClass = 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2);'	
+        let updateClass = 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2);'
 		client.query(updateClass, arr, (err, result) => {
 			if (err) {
 				console.log('Something went wrong... in updating class');
@@ -689,7 +828,7 @@ app.post('/class', async function(req, res) {
 			}
 		});
 	} else if (action== 'Insert') {
-		let insertClass = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4);'	
+		let insertClass = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4);'
 		client.query(insertClass, arr, (err, result) => {
 			if (err) {
 				console.log('Something went wrong... in inserting');
@@ -701,9 +840,9 @@ app.post('/class', async function(req, res) {
 				return;
 			}
 		});
-				
+
 	} else if (action == 'Delete'){
-		let deleteClass = 'DELETE FROM Class WHERE room_num=($2) AND time=($1);'	
+		let deleteClass = 'DELETE FROM Class WHERE room_num=($2) AND time=($1);'
 		client.query(deleteClass, arr2, (err, result) => {
 			if (err) {
 				console.log('Something went wrong...in delete');
@@ -716,8 +855,8 @@ app.post('/class', async function(req, res) {
 				return;
 			}
 		});
-		
-    
+
+
 	}else {
 				console.log('Something went wrong...');
 				res.sendStatus(400);
@@ -738,10 +877,10 @@ app.get('/dropAttend', (req, res) => {
 });
 
 app.get('/studentsInClass/:type', (req, res) => {
-	let type = req.params.type;
-	let arr2 = [type];
-	let studentClass = 'SELECT customer.name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))';
-	client.query(studentClass, arr2, (err, result) => {
+    let type = req.params.type;
+    let arr2 = [type];
+    let studentClass = 'SELECT customer.name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))';
+    client.query(studentClass, arr2, (err, result) => {
         console.log('succeeed');
         console.log(result.rows);
         res.status(200).send(result.rows);
