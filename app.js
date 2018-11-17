@@ -952,6 +952,46 @@ app.get('/studentsInClass/:type', (req, res) => {
     });
 });
 
+app.get('/getcustomerinfo/:email', (req, res) => {
+    // get customer info with a given email
+    let email = req.params.email;
+    let arr2 = [email];
+    let query = 'SELECT name, date_of_birth, address, phone_no, last_visit_date from Customer where email=($1)';
+    client.query(query, arr2, (err, result) => {
+        console.log('succeeed');
+        console.log(result.rows);
+        res.status(200).send(result.rows);
+    });
+});
+
+app.get('/getmemberinfo/:email', (req, res) => {
+    // get customer info with a given email
+    let email = req.params.email;
+    let arr2 = [email];
+    let query = 'SELECT membership_id, member_points from Member where email=($1)';
+    client.query(query, arr2, (err, result) => {
+        if (result) {
+            res.status(200).send([result.rows[0]]);
+        } else {
+            console.log('not a member');
+        }
+    });
+});
+
+app.get('/getbodyprofiles/:email', (req, res) => {
+    // get customer info with a given email
+    let email = req.params.email;
+    let arr2 = [email];
+    let query = 'SELECT DISTINCT b.pid, b.BMI, b.weight, b.age, b.height, b.date from BodyProfile b, Member m WHERE m.email = ($1) and m.membership_id = b.membership_id';
+    client.query(query, arr2, (err, result) => {
+        if (result) {
+            res.status(200).send(result.rows);
+        } else {
+            console.log('not a member');
+        }
+    });
+});
+
 
 
 app.get('/getAddressMachine/:month', async function (req, res) {
