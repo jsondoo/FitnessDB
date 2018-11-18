@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 </head>
 <body>
-    <p>Hello, employee :D</p>
-    <p>Below are links for you to manage our fitness centers.</p>
+    <p id="emp00">Hello, employee :D</p>
+    <p id="emp01">Below are links for you to manage our fitness centers.</p>
     <br>
     <a href="./customerhub">Manage customer information</a>
     <br>
@@ -29,18 +30,25 @@
     <a href="./attend">Show class attendance</a>
 </body>
 <style>
-    p {
+    #emp00{
         font-family: "Arial Black";
         color: indigo;
-        font-size: 200%;
+        font-size: 300%;
+        text-align: center;
+        text-transform: uppercase;
+    }
+    #emp01{
+        font-family: "Times New Roman";
+        color: indigo;
+        font-size: 100%;
         text-align: center;
         text-transform: uppercase;
     }
     a:link {
         color: black;
-        font-family: "Bookman Old Style";
+        font-family: 'Quicksand', sans-serif;
         background-color: transparent;
-        font-size: 150%;
+        font-size: 100%;
         text-transform: uppercase;
     }
     a:hover {

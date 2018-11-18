@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Branch Data</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 </head>
 <body>
    
@@ -32,6 +33,12 @@
     <table id="custBranch" border="1">
     </table>
 <br>
+    <p>
+        <b>
+            SQL query statement
+        </b>
+    </p>
+
 <ul>
   <li> Branch Data: 'SELECT * FROM Branch'</li>
   <li> Get Addresses: 'SELECT b.address FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)'</li>
@@ -135,4 +142,14 @@
 
     </script>
 </body>
+<style>
+    * {
+        font-family: 'Quicksand', sans-serif;
+        color: #080705;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+</style>
 </html>
