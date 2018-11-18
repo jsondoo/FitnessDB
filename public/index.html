@@ -7,17 +7,20 @@
 <body>
     <p id="hello1">WELCOME TO FITNESSDB</p>
     <br>
+    <br>
     <a href="./employee">Page for employees</a>
+    <br>
     <br>
     <a href="./customer">Page for customers</a>
 </body>
 <style>
     #hello1{
         padding: 70px 0;
-        border: 3px solid gold;
+        border: 5px solid gold;
+        border-style: double;
         font-size: 500%;
         font-family: "Arial Black";
-        color: white;
+        color: indigo;
         text-align: center;
         margin: 0;
         position: absolute;
@@ -27,7 +30,21 @@
         transform: translate(-50%, -50%);
     }
     body{
-        background-color: black;
+        background-color: white;
+    }
+    a:link {
+        color: yellow;
+        background-color: transparent;
+        font-size: 80%;
+        text-transform: uppercase;
+    }
+    a:hover {
+        background-color: gold;
+        cursor: pointer;
+    }
+    a:active {
+        box-shadow: none;
+        top: 5px;
     }
 
 </style>
