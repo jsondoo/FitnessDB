@@ -31,9 +31,16 @@
         <input type="submit" name="deleteProfile" formaction="/deletebodyprofile" value="Delete">
     </fieldset>
 </form>
+    <div class="tableDiv"><p><b><u>SQL Statements</u></b></p>
+   <p><b>INSERT:<br></b>INSERT INTO BodyProfile(membership_id, pid, BMI, weight, age, height, date) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        <p><b>UPDATE:<br></b>UPDATE BodyProfile SET BMI=($3), weight=($4), age=($5), height=($6), date=($7) <br> WHERE membership_id=($1) AND pid=($2)
+        <p><b>DELETE:<br></b>DELETE FROM BodyProfile WHERE membership_id=($1) AND pid=($2
+        <p><b>Body Profile Data:<br></b>SELECT * FROM BodyProfile
 <br><br>
+<div class="buttonDiv">
 <div>Body Profile Data Table</div>
 <button onclick="buildHtmlTable()">Refresh Data</button>
+</div>
 <br>
 <table id="bodyProfileData" border="0"></table>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -118,8 +125,18 @@
     }
     table, th, td {
         border: 1px solid #ddd;
-        padding: 8px;
     }
+	form {
+        width: 300px;
+        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+	.buttonDiv{
+	margin-left:10px;
+	margin-top: 150px;
+	padding-top: 10px;
+	}
 </style>
 
 </html>

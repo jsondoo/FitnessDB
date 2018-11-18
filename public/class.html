@@ -9,9 +9,9 @@
     <form id="updateClass" action="/class" method="post">
         <fieldset>
             <legend>Update/Insert/Delete Class Information</legend>
-            Class Time: <br>
+            Class Time (required): <br>
             <input type="text" name="classTime" value=""><br>
-            Class Room Number:<br>
+            Class Room Number (required):<br>
             <input type="text" name="classRoom" value=""><br>
             Instructor ID:<br>
             <input type="text" name="sid" value=""><br>
@@ -23,29 +23,28 @@
 			<input type="submit" name="action" value="Delete" />
         </fieldset>
     </form>
-    <br><br>
-    <div>Class Data</div>
-    <button onclick="buildHtmlTable()">Refresh Data</button>
+    <div class="tableDiv"><p><b><u>SQL Statements</u></b></p>
+   <p><b>INSERT:<br></b>INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4)
+        <br><b>UPDATE:<br></b>UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2)
+        <br><b>DELETE:<br></b>DELETE FROM Class WHERE room_num=($2) AND time=($1)
+        <br><b>CLASS DATA:<br></b>SELECT * FROM Class
+		<br><b>STUDENTS IN TYPE OF CLASS:<br></b>SELECT DISTINCT (customer.name) from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))<br></p>
+	</div>
+	<br>
+    <div class="tableDiv"><b>Class Data</b></div>
+    <button onclick="buildHtmlTable()" class="tableDiv">Refresh Data</button>
     <br>
     <table id="classData" border="1">
     </table>
     <br><br>
 
-    <p>Get students by class type</p>
-    <input id="student_type" type="text" name="studentType" value=""><br>
-    <button onclick="buildHtmlTable2()">Get Data</button>
-
-    <br>
+    <p class="studentDiv"><b>Get students by class type</b></p>
+    <input class="tableDiv" id="student_type" type="text" name="studentType" value=""><br>
+    <button class="buttonDiv" onclick="buildHtmlTable2()">Get Data</button>
+	</p>
     <table id="studentsInClass" border="1">
     </table>
 	<br>
-<ul>
-  <li>Insert: 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4)'</li>
-  <li>Update: 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2)'</li>
-  <li>Delete: 'DELETE FROM Class WHERE room_num=($2) AND time=($1)'</li>
-  <li>Class Data: 'SELECT * FROM Class'</li>
-  <li>Students in Type Of Class: 'SELECT customer.name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))'</li>
-</ul>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
@@ -188,10 +187,32 @@
         font-family: 'Quicksand', sans-serif;
         color: #080705;
     }
+	 form {
+        width: 300px;
+        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
     table, th, td {
         border: 1px solid #ddd;
-        padding: 8px;
+		margin: 40px
+    }  
+	.tableDiv {
+        padding-left: 10px;
+		margin-left: 75px;
     }
+	.listDiv{
+		padding-top: 50px;
+		padding-left: 400px;
+		
+	}
+	.studentDiv{
+		margin-left: 65px;
+	}
+	.buttonDiv{
+		margin-left: 110px;
+	}
+
 </style>
 
 </html>

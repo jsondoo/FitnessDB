@@ -6,46 +6,41 @@
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 </head>
 <body>
-   
+   <div class="center">
     <br><br>
-    <div>Branch Data</div>
+    <div><b>Branch Data</b></div>
     <button onclick="buildHtmlTable('default')" id="default" name="default">Refresh Data</button>
     <br>
     <table id="branchData" border="1">
     </table>
 
-    <p>Get Addresses of Branch Locations That Has Bought a Machine in Past __ Month</p>
+    <p><b>Get Addresses of Branch Locations That Has Bought a Machine in Past __ Month</b></p>
 	<input id="pastMonth" type="text" name="pastMonth" value=""><br>
     <button onclick="buildHtmlTable('address')" id="address" name="address">Get Data</button>
     <br>
-    <table id="addressMachine" border="1">
+    <table id="addressMachine" class="table2" border="1">
     </table>
-	
-    <p>Get Total Cost of All Machines for Each Branch</p>
+
+    <p><b>Get Total Cost of All Machines for Each Branch</b></p>
     <button onclick="buildHtmlTable('cost')" id="cost" name="cost">Get Data</button>
     <br>
-    <table id="costMachine" border="1">
+    <table id="costMachine" border="1" class="table2" >
     </table>
-
-	 <p>Get View that Shows Number of Customers Per Branch</p>
+	 <p><b>Get View that Shows Number of Customers Per Branch</b></p>
     <button onclick="buildHtmlTable('view')"  id="view" name="view">Get View</button>
     <br>
-    <table id="custBranch" border="1">
+    <table id="custBranch" border="1" class="table3">
     </table>
+	</div>
 <br>
-    <p>
-        <b>
-            SQL query statement
-        </b>
-    </p>
+    <div class="tableDiv"><p><b><u>SQL Statements</u></b></p>
+	 <p><b>Branch Data:<br></b>SELECT * FROM Branch
+	<p><b>Get Addresses:<br></b>SELECT distinct (b.address) FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)
+        <p><b>Get Total Cost By Branch:<br></b>Select sum(cost) as Total_Cost , branch_id from Machine group by branch_id
+        <p><b> Create View:<br></b>Create or Replace view custBranch as Select count(email_address) as CustomersInBranch, branch_id From GoesTo group by branch_id 
+		 <p><b>Displaying View:<br></b>SELECT * FROM custBranch
 
-<ul>
-  <li> Branch Data: 'SELECT * FROM Branch'</li>
-  <li> Get Addresses: 'SELECT b.address FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)'</li>
-  <li> Get Total Cost By Branch: 'Select sum(cost) as Total_Cost , branch_id from Machine group by branch_id'</li>
-  <li> Create View: 'Create or Replace view custBranch as Select count(email_address) as CustomersInBranch, branch_id From GoesTo group by branch_id '</li>
-  <li> Displaying View: 'SELECT * FROM custBranch '</li>
-</ul>
+<br><br>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
 		let tableID = "";    // id of table
@@ -149,7 +144,24 @@
     }
     table, th, td {
         border: 1px solid #ddd;
-        padding: 8px;
+		margin-left:420px;
     }
+	.table2{
+        border: 1px solid #ddd;
+		margin-left:510px;
+    }
+	.table3{
+        border: 1px solid #ddd;
+		margin-left:490px;
+    }
+	.center{
+		text-align: center;
+		padding-top: 5px;
+
+	 }
+	 .tableDiv{
+	 text-align:left;
+	 width: 300px;
+	 }
 </style>
 </html>

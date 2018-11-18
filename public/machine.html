@@ -32,11 +32,19 @@
         <input type="submit" name="deletemachine" formaction="/deletemachine" value="Delete">
     </fieldset>
 </form>
-
+    <div class="tableDiv"><p><b><u>SQL Statements</u></b></p>
+        <p><b>INSERT:<br></b>INSERT INTO Machine(mid, date_bought, condition, last_maintenance, cost, type, branch_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)</p>
+        <p><b>UPDATE:<br></b>UPDATE Machine SET date_bought=($2), condition=($3), last_maintenance=($4), cost=($5), type=($6), branch_id=($7) WHERE mid=($1)<br>
+        <p><b>DELETE:<br></b>DELETE FROM machine WHERE mid=($1))<br></p>
+        <p><b>SELECT:<br></b>SELECT * FROM Machine<br></p></div>
+</div>
 <br><br>
 
-<div>Machine Data</div>
+<div class="buttonDiv">
+<div><b>Machine Data</b></div>
 <button onclick="buildHtmlTable()">Refresh Data</button>
+</div>
 <br>
 <table id="machinesData" border="1">
 </table>
@@ -122,8 +130,17 @@
     }
     table, th, td {
         border: 1px solid #ddd;
-        padding: 8px;
     }
+		form {
+        width: 300px;
+        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+		.buttonDiv{
+		margin-top: 110px;
+		margin-left: 10px
+	}
 </style>
 
 </html>
