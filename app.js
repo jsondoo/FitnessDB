@@ -41,6 +41,10 @@ app.get('/customerhub', function (req, res) {
     res.sendFile(__dirname + '/public/customerhub.html');
 });
 
+app.get('/attend', function (req, res) {
+    res.sendFile(__dirname + '/public/attend.html');
+});
+
 app.get('/machine', function (req, res) {
     res.sendFile(__dirname + '/public/machine.html');
 });
@@ -927,7 +931,7 @@ app.post('/class', async function(req, res) {
 				res.sendStatus(400);
 	}
 
-})
+});
 
 
 app.get('/dropAttend', (req, res) => {
@@ -1047,6 +1051,36 @@ app.get('/getmembers', async function (req, res) {
     });
 });
 
+app.get('/performdivision', async function (req, res) {
+    let query = 'SELECT * FROM Member'; // TODO
+    client.query(query, (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(400);
+        } else {
+            console.log('in division');
+            res.status(200).send(result.rows);
+        }
+    });
+});
+
+app.post('/deleteFromAttend', async function(req, res) {
+    let action = req.body.action;
+    if (action === 'delete') {
+        let query ="DELETE FROM Attend WHERE email=''"; // TODO
+        client.query(query, (err, result) => {
+            if (err) {
+                console.log('Oops');
+                res.sendStatus(400);
+                return;
+            } else {
+                console.log('done deleting from attend!');
+                res.redirect('/attend');
+                return;
+            }
+        });
+    }
+});
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server started succesfully.');
