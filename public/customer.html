@@ -2,25 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Customer Portal</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 </head>
 <body>
-    <p>Hello, customer!</p>
+    <p>Hello, customer! Welcome to the customer portal.</p>
     <p><b>FitnessDB Information</b></p>
     <p>View all of our branches</p>
     <button onclick="buildHtmlTable('branches')" id="branches">Show branches</button>
     <br>
     <table id="branchTable" border="1">
     </table>
+    <div class="mapouter">
+        <div class="gmap_canvas">
+            <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=university%20of%20british%20columbia&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+        </div>
+        <style>.mapouter{text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style>
+    </div>
 
+    <br>
     <p>View all of our classes</p>
     <button onclick="buildHtmlTable('classes')" id="classes">Show classes</button>
     <br>
     <table id="classTable" border="1">
     </table>
 
+    <br><br>
     <p><b>Customer Information</b></p>
-    <p>Your email:</p><input id="email" type="text" placeholder="johndoe@gmail.com"><br>
+    <p>Your email:</p><input id="email" type="text" placeholder="fandreaccio2@tuttocitta.it" style="width: 200px;"><br>
     <p>View your personal information</p>
     <button onclick="buildHtmlTable('personal')" id="personal">Show personal information</button>
     <br>
