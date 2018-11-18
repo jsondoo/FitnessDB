@@ -5,10 +5,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Testing GET and POST requests</title>
+    <title>Customer Information</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 </head>
 <body>
+<div>
     <form id="updateCustomer" action="/updatecustomer" method="post">
         <fieldset>
             <legend>Update customer information</legend>
@@ -28,15 +29,19 @@
             <input type="submit" value="Submit">
         </fieldset>
     </form>
-
+	
+	 <div class="sqlDiv"><p><b><u>SQL Statement</u></b></p>
+   
+        <p><b>UPDATE:<br></b>UPDATE Customer SET name=($2), date_of_birth=($3), address=($4), phone_no=($5), last_visit_date=($6) WHERE email=($1)</p>
+      
+</div>
+</div>
     <br><br>
-
-    <div>Customer Data</div>
-    <button onclick="buildHtmlTable()">Refresh Data</button>
+    <div class="tableDiv">Customer Data</div>
+    <button class="button" onclick="buildHtmlTable()">Refresh Data</button>
     <br>
     <table id="customerData" border="1">
     </table>
-
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
         // CHANGE THESE TWO VARIABLES
@@ -118,7 +123,24 @@
     }
     table, th, td {
         border: 1px solid #ddd;
-        padding: 8px;
+    }
+	
+	 form {
+        width: 380px;
+        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+	.tableDiv {
+		margin-top: 220px;
+        padding-left: 10px;
+    }
+	.button{
+		margin-left: 10px;
+	}
+	.sqlDiv {
+		margin-top: 10px;
+        padding-left: 10px;
     }
 </style>
 

@@ -956,7 +956,7 @@ app.get('/dropAttend', (req, res) => {
 app.get('/studentsInClass/:type', (req, res) => {
     let type = req.params.type;
     let arr2 = [type];
-    let studentClass = 'SELECT customer.name from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))';
+    let studentClass = 'SELECT distinct (customer.name) from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))';
     client.query(studentClass, arr2, (err, result) => {
         console.log('succeeed');
         console.log(result.rows);
@@ -1008,7 +1008,7 @@ app.get('/getbodyprofiles/:email', (req, res) => {
 
 app.get('/getAddressMachine/:month', async function (req, res) {
 	let month = req.params.month;
-    let query = "SELECT b.address FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)";
+    let query = "SELECT distinct( b.address) FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)";
     client.query(query, (err, result) => {
         if (err) {
             console.log(err.message);
