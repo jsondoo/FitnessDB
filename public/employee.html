@@ -2,38 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <title>Employee Portal</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
-    <p id="emp00">Hello, employee :D</p>
+    <p id="emp00" class="display-1">Hello, employee :D</p>
     <p id="emp01">Below are links for you to manage our fitness centers.</p>
     <br>
 	<div class="center">
-    <a href="./customerhub">Manage customer information</a>
-    <br>
-    <br>
-    <a href="./machine">Manage machines</a>
-    <br>
-    <br>
-    <a href="./class">Manage classes</a>
-    <br>
-    <br>
-    <a href="./bodyprofile">Manage body profiles</a>
-    <br>
-    <br>
-    <a href="./membership">Manage memberships</a>
-    <br>
-    <br>
-    <a href="./branch">Manage branches</a>
-    <br>
-    <br>
-    <a href="./attend">Show class attendance</a>
+        <button type="button" class="btn btn-outline-primary">
+            <a href="./customerhub">Manage customer information</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary">
+            <a href="./machine">Manage machines</a>
+        </button>
+        <br>
+        <br>
+        <button type="button" class="btn btn-outline-primary">
+            <a href="./membership">Manage memberships</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary">
+        <a href="./bodyprofile">Manage body profiles</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary">
+            <a href="./branch">Manage branches</a>
+        </button>
+        <br><br>
+        <button type="button" class="btn btn-outline-primary">
+            <a href="./class">Manage classes</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary">
+            <a href="./attend">Show class attendance</a>
+        </button>
 	</div>
 </body>
 <style>
     #emp00{
-        font-family: "Arial Black";
         color: indigo;
         font-size: 400%;
         text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
@@ -41,27 +45,11 @@
         text-transform: uppercase;
     }
     #emp01{
-        font-family: "Times New Roman";
         color: indigo;
         font-size: 120%;
         text-shadow: -1px 0 white, 0 1px white, 1px 0 yellow, 0 -1px yellow;
         text-align: center;
         text-transform: uppercase;
-    }
-    a:link {
-        color: yellow;
-        font-family: 'Quicksand', sans-serif;
-        background-color: transparent;
-        font-size: 100%;
-        text-transform: uppercase;
-    }
-    a:hover {
-        background-color: black;
-        cursor: pointer;
-    }
-    a:active {
-        box-shadow: none;
-        top: 5px;
     }
 	.center{
 		margin-left: -10px;
@@ -72,6 +60,9 @@
         background-repeat: no-repeat;
         background-position: center;
         margin-top: 20%;
+    }
+    button {
+        background-color: white !important;
     }
 </style>
 </html>
