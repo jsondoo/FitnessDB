@@ -6,17 +6,22 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
+    <div id="background">
+        <div class="layer" />
+    </div>
     <div id="container">
-        <p id="hello1">
+        <p id="heading">
             <b>
-            WELCOME TO FITNESSDB
+            FitnessDB
             </b>
         </p>
+        <p>Strength does not come from winning.</p>
+        <p>Your struggles develop your strengths.</p>
         <div id="buttons">
-            <button type="button" class="btn btn-outline-primary">
+            <button id="employeeButton" type="button" class="btn btn-outline-primary">
                 <a href="./employee">Page for employees</a>
             </button>
-            <button type="button" class="btn btn-outline-primary">
+            <button id="customerButton" type="button" class="btn btn-outline-primary">
                 <a href="./customer">Page for customers</a>
             </button>
         </div>
@@ -34,17 +39,38 @@
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
-    #hello1{
-        padding: 100px 0;
-        border: 5px solid gold;
-        font-size: 500%;
-        font-family: "Arial Black";
-        color: indigo;
-        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 
+    #heading {
+        font-size: 500%;
+        color: black;
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     }
-    #buttons :hover {
-        background-color: darkgray;
+
+    #buttons {
+        padding: 50px;
+    }
+
+    #employeeButton {
+        background: whitesmoke;
+    }
+
+    #customerButton {
+        background: whitesmoke;
+    }
+
+    /* image source: https://www.goldsgym.com/wp-content/uploads/sites/1/2018/07/fit-exp-home-page-hero-v10.jpg */
+    #background {
+        height: 100vh;
+        background: url("https://imgur.com/WSWfiM0.jpg") no-repeat center center fixed;
+        background-size: 100% 100%;
+    }
+    .layer {
+        background-color: rgba(255, 255, 255, 0.1);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
 </style>
 </html>
