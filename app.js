@@ -275,8 +275,23 @@ app.get('/populatemachine', (req, res) => {
 });
 
 app.get('/populateroom', (req, res) => {
+    let dropQuery = 'DROP TABLE Room';
+    client.query(dropQuery, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('dropped room');
+        }
+    });
+
     let createRoomQuery = 'CREATE TABLE IF NOT EXISTS Room(room_num INTEGER, capacity INTEGER,PRIMARY KEY (room_num))';
-    client.query(createRoomQuery);
+    client.query(createRoomQuery, (err, result) => {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log('created room');
+        }
+    });
     let insertRoom = 'INSERT INTO Room(room_num, capacity) VALUES ($1, $2)';
     roomData.forEach((room) => {
         let arr = [room.room_num, room.capacity];
@@ -1060,7 +1075,9 @@ app.get('/getmembers', async function (req, res) {
 });
 
 app.get('/performdivision', async function (req, res) {
-    let query = 'SELECT * FROM Member'; // TODO
+    let query = "SELECT DISTINCT A1.email FROM Attend as A1 WHERE NOT EXISTS (" +
+        "(SELECT room_num FROM Room) EXCEPT (SELECT A2.room_num FROM Attend as A2 WHERE A2.email = A1.email)" +
+        ")";
     client.query(query, (err, result) => {
         if (err) {
             console.log(err.message);
@@ -1075,7 +1092,7 @@ app.get('/performdivision', async function (req, res) {
 app.post('/deleteFromAttend', async function(req, res) {
     let action = req.body.action;
     if (action === 'delete') {
-        let query ="DELETE FROM Attend WHERE email=''"; // TODO
+        let query ="DELETE FROM Attend WHERE email='nhussell1@redcross.org' AND room_num='101'";
         client.query(query, (err, result) => {
             if (err) {
                 console.log('Oops');

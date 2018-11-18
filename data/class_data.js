@@ -18,4 +18,5 @@ module.exports = [
     {"time": "2018-11-08 18:53:42", "room_num": 101, "sid": 96293, "course_type": "strength"},
     {"time": "2018-11-01 06:38:48", "room_num": 103, "sid": 73690, "course_type": "yoga"},
     {"time": "2018-10-22 02:58:17", "room_num": 102, "sid": 37983, "course_type": "yoga"},
-    {"time": "2018-10-19 00:58:42", "room_num": 101, "sid": 31970, "course_type": "yoga"}];
+    {"time": "2018-10-19 00:58:42", "room_num": 101, "sid": 31970, "course_type": "yoga"},
+    {"time": "2018-10-20 00:58:42", "room_num": 106, "sid": 31970, "course_type": "yoga"}];

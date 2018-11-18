@@ -15,7 +15,8 @@
     <br>
 
     <!-- get result of division query -->
-    <button onclick="buildHtmlTable('division')">Division - customers that went to class in every room</button>
+    <p>Find all customers that have attended classes in every room</p>
+    <button onclick="buildHtmlTable('division')">Division</button>
     <br>
     <table id="division" border="1">
     </table>
@@ -27,6 +28,16 @@
             <input type="submit" name="action" value="delete" />
         </fieldset>
     </form>
+
+    <div class="tableDiv"><p><b><u>SQL Statements</u></b></p>
+        <p><b>SELECT:<br></b>INSERT INTO RegularMembership(membership_id, start_date, expiration_date, payment_method
+            VALUES ($1, $2, $3, $4)<br>INSERT INTO Member VALUES ($1, $2, $3)</p>
+        <p><b>DIVISION:<br></b>SELECT DISTINCT A1.email FROM Attend as A1 WHERE NOT EXISTS ( <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;(SELECT room_num FROM Room) <br>
+            &nbsp;&nbsp;&nbsp;&nbsp; EXCEPT <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;(SELECT A2.room_num FROM Attend as A2 WHERE A2.email = A1.email) <br>
+            )</p>
+        <p><b>DELETE:<br></b>DELETE FROM Attend WHERE email='nhussell1@redcross.org' AND room_num='101'<br></p>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>

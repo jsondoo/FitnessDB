@@ -3,7 +3,11 @@ module.exports = [
         "room_num": 108,
         "time": "2018-10-11 20:37:33",
     },
-
+    {
+        "email": "nhussell1@redcross.org",
+        "room_num": 106,
+        "time": "2018-10-20 00:58:42",
+    },
     {
         "email": "nhussell1@redcross.org",
         "room_num": 108,
