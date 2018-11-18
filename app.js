@@ -337,6 +337,14 @@ app.get('/populatepersonaltrainer', (req, res) => {
 
 
 app.get('/populateAttend', async function (req, res) {
+    let dropTable = 'DROP Table ATTEND';
+    client.query(dropTable, (err, result) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(result.rows[0])
+        }
+    });
 
     let createAttendTable = 'CREATE TABLE ATTEND(email CHAR(40), room_num INTEGER, time DATE,' +
         'PRIMARY KEY(email, room_num, time),' +
