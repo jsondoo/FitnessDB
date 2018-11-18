@@ -6,41 +6,90 @@
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 </head>
 <body>
-   <div class="center">
+    <ul>
+        <li>
+   <div class="left">
     <br><br>
-    <div><b>Branch Data</b></div>
+    <div>
+        <b>
+            Branch Data
+        </b>
+    </div>
     <button onclick="buildHtmlTable('default')" id="default" name="default">Refresh Data</button>
     <br>
     <table id="branchData" border="1">
     </table>
 
-    <p><b>Get Addresses of Branch Locations That Has Bought a Machine in Past __ Month</b></p>
+    <p>
+        <b>
+            Get Addresses of Branch Locations That Has Bought a Machine in Past __ Month
+        </b>
+    </p>
 	<input id="pastMonth" type="text" name="pastMonth" value=""><br>
     <button onclick="buildHtmlTable('address')" id="address" name="address">Get Data</button>
     <br>
     <table id="addressMachine" class="table2" border="1">
     </table>
 
-    <p><b>Get Total Cost of All Machines for Each Branch</b></p>
+    <p>
+        <b>
+            Get Total Cost of All Machines for Each Branch
+        </b>
+    </p>
     <button onclick="buildHtmlTable('cost')" id="cost" name="cost">Get Data</button>
     <br>
     <table id="costMachine" border="1" class="table2" >
     </table>
-	 <p><b>Get View that Shows Number of Customers Per Branch</b></p>
+	 <p>
+         <b>
+             Get View that Shows Number of Customers Per Branch
+         </b>
+     </p>
     <button onclick="buildHtmlTable('view')"  id="view" name="view">Get View</button>
     <br>
     <table id="custBranch" border="1" class="table3">
     </table>
 	</div>
-<br>
-    <div class="tableDiv"><p><b><u>SQL Statements</u></b></p>
-	 <p><b>Branch Data:<br></b>SELECT * FROM Branch
-	<p><b>Get Addresses:<br></b>SELECT distinct (b.address) FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)
-        <p><b>Get Total Cost By Branch:<br></b>Select sum(cost) as Total_Cost , branch_id from Machine group by branch_id
-        <p><b> Create View:<br></b>Create or Replace view custBranch as Select count(email_address) as CustomersInBranch, branch_id From GoesTo group by branch_id 
-		 <p><b>Displaying View:<br></b>SELECT * FROM custBranch
+        </li>
 
-<br><br>
+    <br>
+        <li>
+    <div class="tableDiv">
+        <p>
+            <b>
+                <u>SQL Statements</u>
+            </b>
+        </p>
+	 <p>
+         <b>Branch Data:
+             <br>
+         </b>
+         SELECT * FROM Branch
+	<p>
+        <b>
+            Get Addresses:
+            <br>
+        </b>
+        SELECT distinct (b.address) FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)
+        <p>
+        <b>
+            Get Total Cost By Branch:
+            <br>
+        </b>
+        Select sum(cost) as Total_Cost , branch_id from Machine group by branch_id
+        <p>
+        <b>
+            Create View:<br>
+        </b>
+        Create or Replace view custBranch as Select count(email_address) as CustomersInBranch, branch_id From GoesTo group by branch_id
+		 <p>
+        <b>
+            Displaying View:<br>
+        </b>
+        SELECT * FROM custBranch
+
+    </p></div></li></ul>
+
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
 		let tableID = "";    // id of table
@@ -137,6 +186,7 @@
 
     </script>
 </body>
+
 <style>
     * {
         font-family: 'Quicksand', sans-serif;
@@ -144,24 +194,42 @@
     }
     table, th, td {
         border: 1px solid #ddd;
-		margin-left:420px;
+		margin-left:0px;
     }
-	.table2{
-        border: 1px solid #ddd;
-		margin-left:510px;
-    }
-	.table3{
-        border: 1px solid #ddd;
-		margin-left:490px;
-    }
-	.center{
-		text-align: center;
-		padding-top: 5px;
-
+	/*.table2{*/
+        /*border: 1px solid #ddd;*/
+		/*margin-left:510px;*/
+    /*}*/
+	/*.table3{*/
+        /*border: 1px solid #ddd;*/
+		/*margin-left:490px;*/
+    /*}*/
+	.left{
+		text-align: left;
+        border: 2px solid indigo;
+        padding-right: 10px;
 	 }
 	 .tableDiv{
-	 text-align:left;
-	 width: 300px;
+         right: 0px;
+         width: 500px;
+         padding: 10px;
 	 }
+
+    ul {
+        width: 100%;
+        margin: 0;
+        padding:0;
+        list-style: none;
+    }
+
+    ul li {
+        float: left;
+        width: 30%
+        margin-right: 0;
+    }
+
+    ul li.tableDiv {
+        margin-right: 0;
+    }
 </style>
 </html>
