@@ -633,7 +633,7 @@ app.post('/updatecustomer', async function (req, res) {
             return;
         } else {
             console.log('Updated customer!');
-            res.sendStatus(200);
+            res.redirect("/customerhub");
             return;
         }
     });
@@ -858,54 +858,6 @@ app.post('/class', async function(req, res) {
     let arr = [classTime, room, sid, type];
     let arr2 = [classTime, room];
 
-
-    if (action == 'Update') {
-        let updateClass = 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2);'
-        client.query(updateClass, arr, (err, result) => {
-            if (err) {
-                console.log('Something went wrong... in updating class');
-                res.sendStatus(400);
-                return;
-            } else {
-                console.log('Updated class!');
-                res.sendStatus(200);
-                return;
-            }
-        });
-    } else if (action == 'Insert') {
-        let insertClass = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4);'
-        client.query(insertClass, arr, (err, result) => {
-            if (err) {
-                console.log('Something went wrong... in inserting');
-                res.sendStatus(400);
-                return;
-            } else {
-                console.log('Inserted class!');
-                res.sendStatus(200);
-                return;
-            }
-        });
-
-    } else if (action == 'Delete') {
-        let deleteClass = 'DELETE FROM Class WHERE room_num=($2) AND time=($1);'
-        client.query(deleteClass, arr2, (err, result) => {
-            if (err) {
-                console.log('Something went wrong...in delete');
-                console.log(err);
-                res.sendStatus(400);
-                return;
-            } else {
-                console.log('Deleted class!');
-                res.sendStatus(200);
-                return;
-            }
-        });
-
-
-    } else {
-        console.log('Something went wrong...');
-        res.sendStatus(400);
-    }
 	if (action == 'Update') {
         let updateClass = 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2);'
 		client.query(updateClass, arr, (err, result) => {
