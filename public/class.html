@@ -31,7 +31,7 @@
 		<br><b>STUDENTS IN TYPE OF CLASS:<br></b>SELECT DISTINCT (customer.name) from Customer customer, Class class, Attend attend where class.time = attend.time and class.room_num = attend.room_num and customer.email = attend.email AND lower(class.class_type) like lower(($1))<br></p>
 	</div>
 	<br>
-    <div class="tableDiv"><b>Class Data</b></div>
+    <div class="tableDiv">Class Data</div>
     <button onclick="buildHtmlTable()" class="tableDiv">Refresh Data</button>
     <br>
     <table id="classData" border="1">
