@@ -957,7 +957,7 @@ app.get('/getmemberinfo/:email', (req, res) => {
     });
 });
 
-app.get('/getbodyprofiles/:email', (req, res) => {
+app.get('/getbodyprofilesbyemail/:email', (req, res) => {
     // get customer info with a given email
     let email = req.params.email;
     let arr2 = [email];
