@@ -78,8 +78,7 @@ app.get('/populatecustomer', (req, res) => {
             console.log('Dropped customer table');
         }
     });
-    let queryA = 'CREATE TABLE IF NOT EXISTS Customer(email CHAR(40), name CHAR(20), date_of_birth DATE, address CHAR(50), phone_no CHAR(12), last_visit_date DATE, PRIMARY KEY (email))';
-    // Create Customer table
+    let queryA = 'CREATE TABLE Customer(email CHAR(40), name CHAR(20), date_of_birth DATE, address CHAR(50), phone_no CHAR(12), last_visit_date DATE, PRIMARY KEY (email))';
     client.query(queryA, (err, result) => {
         if (err) {
             console.log(err.message);
@@ -171,6 +170,12 @@ app.get('/populateregmembership', (req, res) => {
 });
 
 app.get('/populatepremiummember', (req, res) => {
+    client.query('DROP TABLE PremiumMembership', (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
+
     let createPremiumMemberQuery = 'CREATE TABLE PremiumMembership( membership_id INTEGER, sid INTEGER, PRIMARY KEY (membership_id), \n' +
         'FOREIGN KEY (membership_id) REFERENCES regularMembership ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (sid) REFERENCES PersonalTrainer \n' +
         'ON DELETE CASCADE ON UPDATE CASCADE)';
@@ -195,6 +200,12 @@ app.get('/populatepremiummember', (req, res) => {
 });
 
 app.get('/populatemember', (req, res) => {
+    client.query('DROP TABLE Member', (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
+
     let createMemberQuery = 'CREATE TABLE Member (membership_id INTEGER, email CHAR(40), member_points INTEGER),' +
         'PRIMARY KEY(email),' +
         'FOREIGN KEY(email) REFERENCES Customer ON UPDATE CASCADE,' +
@@ -253,6 +264,11 @@ app.get('/populatebranch', (req, res) => {
 });
 
 app.get('/populatemachine', (req, res) => {
+    client.query('DROP TABLE Machine', (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
     let createMachineQuery = 'CREATE TABLE Machine (mid INTEGER, date_bought DATE, condition CHAR(5), \n' +
         'last_maintenance DATE, cost INTEGER, type CHAR(20), branch_id INTEGER, PRIMARY KEY (mid), \n' +
         'FOREIGN KEY (branch_id) REFERENCES Branch ON DELETE SET NULL ON UPDATE CASCADE)';
@@ -307,8 +323,12 @@ app.get('/populateroom', (req, res) => {
 });
 
 app.get('/populateinstructor', (req, res) => {
-    // let query = "DROP TABLE INSTRUCTOR";
-    let query = 'CREATE TABLE IF NOT EXISTS Instructor(sid INTEGER, name CHAR(20),\n' +
+    client.query('DROP TABLE Instructor', (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
+    let query = 'CREATE TABLE Instructor(sid INTEGER, name CHAR(20),\n' +
         'phone_no CHAR(12), email CHAR(40), date_joined DATE, hourly_wage INTEGER,\n' +
         'PRIMARY KEY(sid))';
     client.query(query, (err, result) => {
@@ -335,6 +355,11 @@ app.get('/populateinstructor', (req, res) => {
 });
 
 app.get('/populatepersonaltrainer', (req, res) => {
+    client.query('DROP TABLE PersonalTrainer', (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
     let createPersonalTrainerQuery = 'CREATE TABLE PersonalTrainer(certification CHAR(5),sid INTEGER, PRIMARY KEY (sid),FOREIGN KEY (sid) REFERENCES Instructor ON DELETE CASCADE ON UPDATE CASCADE)';
     client.query(createPersonalTrainerQuery);
     let insertPersoanlTrainer = 'INSERT INTO PersonalTrainer(sid, certification) VALUES ($1, $2)';
@@ -385,7 +410,6 @@ app.get('/populateAttend', async function (req, res) {
         });
     });
 });
-
 
 app.get('/populategoesto', async function (req, res) {
     let dropGoesTo = 'DROP TABLE GoesTo';
@@ -443,7 +467,12 @@ app.get("/dropbodyprofile", (req, res) => {
 });
 
 app.get('/populatebodyprofile', (req, res) => {
-    let createClass = 'CREATE TABLE IF NOT EXISTS BodyProfile(membership_id INTEGER NOT NULL, pid INTEGER NOT NULL, BMI INTEGER, weight INTEGER, \n' +
+    client.query('DROP TABLE BodyProfile', (err, result) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
+    let createClass = 'CREATE TABLE BodyProfile(membership_id INTEGER NOT NULL, pid INTEGER NOT NULL, BMI INTEGER, weight INTEGER, \n' +
         'age INTEGER, height INTEGER, date DATE, PRIMARY KEY(membership_id, pid), FOREIGN KEY (membership_id) REFERENCES RegularMembership ON DELETE CASCADE \n' +
         'ON UPDATE CASCADE)';
     client.query(createClass, (err, result) => {
@@ -782,7 +811,7 @@ app.post('/updatemembership', async function (req, res) {
     }
 });
 
-app.post('/updatemachines', async function(req,res){
+app.post('/updatemachines', async function (req, res) {
     let mid = req.body.mid;
     let date_bought = req.body.date_bought;
     let condition = req.body.condition;
@@ -794,28 +823,28 @@ app.post('/updatemachines', async function(req,res){
     let updateMachines = "UPDATE Machine SET date_bought=($2), condition=($3), last_maintenance=($4), cost=($5), type=($6), branch_id=($7) WHERE mid=($1);";
     let arr = [mid, date_bought, condition, last_maintenance, cost, type, branch_id];
     client.query(updateMachines, arr, (err, result) => {
-        if (err){
+        if (err) {
             console.log(err);
             console.log('Ooooops...');
             res.sendStatus(400);
-        }else{
+        } else {
             console.log('Update Machine Information!!!');
             res.redirect("/machine");
         }
     });
 });
 
-app.post('/insertMachine', async function(req, res) {
+app.post('/insertMachine', async function (req, res) {
     // data from the form
     let mid = req.body.mid;
-    let date_bought =  req.body.date_bought;
+    let date_bought = req.body.date_bought;
     let condition = req.body.condition;
     let last_maintenance = req.body.last_maintenance;
     let cost = req.body.cost;
     let type = req.body.type;
     let branch_id = req.body.branch_id;
 
-    let insertMachine = 'INSERT INTO Machine(mid, date_bought, condition, last_maintenance, cost, type, branch_id)'+
+    let insertMachine = 'INSERT INTO Machine(mid, date_bought, condition, last_maintenance, cost, type, branch_id)' +
         'VALUES ($1, $2, $3, $4, $5, $6, $7)';
     let arr = [mid, date_bought, condition, last_maintenance, cost, type, branch_id];
     client.query(insertMachine, arr, (err, result) => {
@@ -830,25 +859,23 @@ app.post('/insertMachine', async function(req, res) {
 });
 
 
-app.post('/deletemachine', async function(req,res){
+app.post('/deletemachine', async function (req, res) {
     let mid = req.body.mid;
 
     let insertmachine = 'DELETE FROM machine WHERE mid=($1)';
     let machine = [mid];
-    client.query(insertmachine, machine,(err,result) => {
-        if(err){
+    client.query(insertmachine, machine, (err, result) => {
+        if (err) {
             console.log(err.message);
             res.sendStatus(400);
-        }else{
+        } else {
             console.log('Deleted machine with machine id: ${mid}');
             res.redirect("/machine");
         }
     });
 });
 
-
-
-app.post('/class', async function(req, res) {
+app.post('/class', async function (req, res) {
     // data from the form
     let classTime = req.body.classTime;
     let room = req.body.classRoom;
@@ -858,66 +885,50 @@ app.post('/class', async function(req, res) {
     let arr = [classTime, room, sid, type];
     let arr2 = [classTime, room];
 
-	if (action == 'Update') {
+    if (action == 'Update') {
         let updateClass = 'UPDATE Class SET sid=($3), class_type=($4) where time=($1) and room_num=($2);'
-		client.query(updateClass, arr, (err, result) => {
-			if (err) {
-				console.log('Something went wrong... in updating class');
-				res.sendStatus(400);
-				return;
-			} else {
-				console.log('Updated class!');
-				res.redirect("/class");
-				return;
-			}
-		});
-	} else if (action== 'Insert') {
-		let insertClass = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4);'
-		client.query(insertClass, arr, (err, result) => {
-			if (err) {
-				console.log('Something went wrong... in inserting');
-				res.sendStatus(400);
-				return;
-			} else {
-				console.log('Inserted class!');
-				res.redirect("/class");
-				return;
-			}
-		});
-
-	} else if (action == 'Delete'){
-		let deleteClass = 'DELETE FROM Class WHERE room_num=($2) AND time=($1);'
-		client.query(deleteClass, arr2, (err, result) => {
-			if (err) {
-				console.log('Something went wrong...in delete');
-				console.log(err);
-				res.sendStatus(400);
-				return;
-			} else {
-				console.log('Deleted class!');
-				res.redirect("/class");
-				return;
-			}
-		});
-
-
-	}else {
-				console.log('Something went wrong...');
-				res.sendStatus(400);
-	}
-
-});
-
-
-app.get('/dropAttend', (req, res) => {
-    let dropAttend = 'DROP TABLE Attend';
-    client.query(dropAttend, (err, result) => {
-        if (err) {
-            console.log(err.stack)
-        } else {
-            console.log(result.rows[0])
-        }
-    });
+        client.query(updateClass, arr, (err, result) => {
+            if (err) {
+                console.log('Something went wrong... in updating class');
+                res.sendStatus(400);
+                return;
+            } else {
+                console.log('Updated class!');
+                res.redirect("/class");
+                return;
+            }
+        });
+    } else if (action == 'Insert') {
+        let insertClass = 'INSERT INTO Class(time, room_num, sid, class_type) VALUES ($1, $2, $3, $4);'
+        client.query(insertClass, arr, (err, result) => {
+            if (err) {
+                console.log('Something went wrong... in inserting');
+                res.sendStatus(400);
+                return;
+            } else {
+                console.log('Inserted class!');
+                res.redirect("/class");
+                return;
+            }
+        });
+    } else if (action == 'Delete') {
+        let deleteClass = 'DELETE FROM Class WHERE room_num=($2) AND time=($1);'
+        client.query(deleteClass, arr2, (err, result) => {
+            if (err) {
+                console.log('Something went wrong...in delete');
+                console.log(err);
+                res.sendStatus(400);
+                return;
+            } else {
+                console.log('Deleted class!');
+                res.redirect("/class");
+                return;
+            }
+        });
+    } else {
+        console.log('Something went wrong...');
+        res.sendStatus(400);
+    }
 });
 
 app.get('/studentsInClass/:type', (req, res) => {
@@ -971,10 +982,8 @@ app.get('/getbodyprofilesbyemail/:email', (req, res) => {
     });
 });
 
-
-
 app.get('/getAddressMachine/:month', async function (req, res) {
-	let month = req.params.month;
+    let month = req.params.month;
     let query = "SELECT distinct( b.address) FROM Branch b, Machine m WHERE m.branch_id = b.branch_id and m.date_bought >= date_trunc('month', current_date- interval '" + month + "' month)";
     client.query(query, (err, result) => {
         if (err) {
@@ -1000,9 +1009,9 @@ app.get('/getCostMachine', async function (req, res) {
 
 
 app.get('/getCustBranch', async function (req, res) {
-	//let query = ' drop view custBranch';
+    //let query = ' drop view custBranch';
     //let query = 'create or replace view custBranch as Select count(email_address) as CustomersInBranch, branch_id From GoesTo group by branch_id';
-	let query = 'SELECT * FROM custBranch';
+    let query = 'SELECT * FROM custBranch';
     client.query(query, (err, result) => {
         if (err) {
             console.log(err.message);
@@ -1041,10 +1050,10 @@ app.get('/performdivision', async function (req, res) {
     });
 });
 
-app.post('/deleteFromAttend', async function(req, res) {
+app.post('/deleteFromAttend', async function (req, res) {
     let action = req.body.action;
     if (action === 'delete') {
-        let query ="DELETE FROM Attend WHERE email='nhussell1@redcross.org' AND room_num='101'";
+        let query = "DELETE FROM Attend WHERE email='nhussell1@redcross.org' AND room_num='101'";
         client.query(query, (err, result) => {
             if (err) {
                 console.log('Oops');
@@ -1059,6 +1068,7 @@ app.post('/deleteFromAttend', async function(req, res) {
     }
 });
 
+/* Start the node server */
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server started succesfully.');
     console.log('Listening on port 5000');
