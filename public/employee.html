@@ -7,63 +7,74 @@
     <link rel="shortcut icon" href="https://i.imgur.com/79tPaOb.jpg"/>
 </head>
 <body>
-    <p id="emp00" class="display-1">Hello, employee :D</p>
-    <p id="emp01">Below are links for you to manage our fitness centers.</p>
-    <br><br>
-	<div class="center">
-        <button type="button" class="btn btn-outline-primary">
-            <a href="./customerhub">customer info</a>
-        </button>
-        <button type="button" class="btn btn-outline-primary">
-            <a href="./machine">machines</a>
-        </button>
-        <!--<br>-->
-        <!--<br>-->
-        <button type="button" class="btn btn-outline-primary">
-            <a href="./membership">memberships</a>
-        </button>
-        <button type="button" class="btn btn-outline-primary">
-        <a href="./bodyprofile">body profiles</a>
-        </button>
-        <!--<br><br>-->
-        <button type="button" class="btn btn-outline-primary">
-            <a href="./branch">branches</a>
-        </button>
-        <button type="button" class="btn btn-outline-primary">
-            <a href="./class">classes</a>
-        </button>
-        <button type="button" class="btn btn-outline-primary">
-            <a href="./attend">class attendance</a>
-        </button>
-	</div>
+    <h1>Employee Portal</h1>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage customer info</h5>
+                    <p class="card-text">Add a new customer to our database or update a customer's information.</p>
+                    <a href="./customerhub" class="btn btn-outline-primary">Click here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage machine info</h5>
+                    <p class="card-text">Update machine information such as its condition and last maintenance.</p>
+                    <a href="./machine" class="btn btn-outline-primary">Click here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage memberships</h5>
+                    <p class="card-text">Everything related to memberships.</p>
+                    <a href="./membership" class="btn btn-outline-primary">Click here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage body profiles</h5>
+                    <p class="card-text">Personal trainers can update body profiles here.</p>
+                    <a href="./bodyprofile" class="btn btn-outline-primary">Click here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage branch</h5>
+                    <p class="card-text">Manage information about our branch locations.</p>
+                    <a href="./branch.html" class="btn btn-outline-primary">Click here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage classes</h5>
+                    <p class="card-text">Yoga, dance, meditation, pilates</p>
+                    <a href="./class" class="btn btn-outline-primary">Classes</a>
+                    <a href="./attend" class="btn btn-outline-primary">Class Attendance</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 <style>
-    #emp00{
-        color: indigo;
-        font-size: 400%;
-        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-        text-align: center;
-        text-transform: uppercase;
+    h1 {
+        padding: 30px;
     }
-    #emp01{
-        color: indigo;
-        font-size: 120%;
-        text-shadow: -1px 0 white, 0 1px white, 1px 0 yellow, 0 -1px yellow;
-        text-align: center;
-        text-transform: uppercase;
+    .row {
+        padding: 0px 30px 30px 30px;
     }
-	.center{
-		margin-left: -10px;
-		text-align: center;
-    }
-    body{
-        background-image: url("https://i.imgur.com/oZa91vW.gif");
-        background-repeat: no-repeat;
-        background-position: center;
-        margin-top: 20%;
-    }
-    button {
-        background-color: white !important;
-        text-transform: uppercase;}
 </style>
 </html>
