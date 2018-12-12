@@ -18,12 +18,10 @@ let bodyProfileData = require("./data/bodyprofile_data");
 
 
 const pg = require('pg');
+require('dotenv').config();
+const connectionString = process.env.DATABASE_URL
 const client = new pg.Client({
-    user: "ldkazcmbjgsuwd",
-    password: "5d89b5fd97cdf96343d3a97e34e3802890922b99e9198ae45b93fafdbaf3badb",
-    database: "dd7dpk6dg5oidc",
-    port: 5432,
-    host: "ec2-50-19-127-158.compute-1.amazonaws.com",
+    connectionString: connectionString,
     ssl: true
 });
 client.connect();
