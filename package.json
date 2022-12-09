@@ -20,7 +20,7 @@
   "homepage": "https://github.com/jsondoo/FitnessDB#readme",
   "dependencies": {
     "dotenv": "^6.2.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "pg": "^7.6.1"
   },
   "devDependencies": {
